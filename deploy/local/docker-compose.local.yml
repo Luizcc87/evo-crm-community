@@ -1,0 +1,18 @@
+services:
+  # Overlay local para desenvolvimento/ajustes do fork.
+  # Use este arquivo como ponto de partida para customizacoes suas.
+  evo-crm:
+    image: luizcc87/evo-crm:local
+    environment:
+      RAILS_ENV: development
+
+  evo-auth:
+    image: luizcc87/evo-auth-service-community:local
+    environment:
+      RAILS_ENV: development
+
+  evo-core:
+    image: luizcc87/evo-ai-core-service-community:local
+
+  evo-processor:
+    image: luizcc87/evo-ai-processor-community:local

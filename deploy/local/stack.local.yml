@@ -1,0 +1,23 @@
+version: "3.8"
+
+# Overlay local para Swarm.
+# Use este arquivo para ajustar imagens, variaveis ou servicos sem mexer no stack de origem.
+
+services:
+  evo_gateway:
+    image: luizcc87/evo-crm-gateway:1.0.0-uazapi
+
+  evo_auth:
+    image: luizcc87/evo-auth-service-community:1.0.0-uazapi
+
+  evo_crm:
+    image: luizcc87/evo-crm:1.0.0-uazapi
+
+  evo_core:
+    image: luizcc87/evo-ai-core-service-community:1.0.0-uazapi
+
+  evo_processor:
+    image: luizcc87/evo-ai-processor-community:1.0.0-uazapi
+
+  evo_bot_runtime:
+    image: luizcc87/evo-bot-runtime:1.0.0-uazapi

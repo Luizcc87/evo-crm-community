@@ -1,0 +1,14 @@
+services:
+  # Referencia da origem oficial.
+  # Use este arquivo apenas como espelho do upstream para comparacao.
+  evo-crm:
+    image: evoapicloud/evo-crm:latest
+
+  evo-auth:
+    image: evoapicloud/evo-auth-service-community:latest
+
+  evo-core:
+    image: evoapicloud/evo-ai-core-service-community:latest
+
+  evo-processor:
+    image: evoapicloud/evo-ai-processor-community:latest

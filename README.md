@@ -29,6 +29,9 @@ EVO CRM Community is the open-source edition of the EVO CRM platform — a compl
 
 This repository is the **monorepo entrypoint**: it aggregates all community services as Git submodules, giving you a single place to clone, update and orchestrate the entire platform.
 
+For operational deployment and fork maintenance, see [README-OPERACOES.md](./README-OPERACOES.md).
+Local customizations and notes follow the convention documented in [docs/local/README.md](./docs/local/README.md) and [deploy/local/README.md](./deploy/local/README.md).
+
 ---
 
 ## Architecture
