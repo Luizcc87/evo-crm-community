@@ -1,0 +1,128 @@
+version: "3.8"
+
+# =============================================================================
+# Evo CRM Community — Versão VARIÁVEIS (Uso no Portainer)
+# =============================================================================
+
+services:
+  evo_gateway:
+    image: lc1868/evo-crm-gateway:1.0.0
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network_swarm_public
+        - traefik.http.routers.evo_gateway.rule=Host(`${API_DOMAIN}`)
+        - traefik.http.routers.evo_gateway.entrypoints=websecure
+        - traefik.http.routers.evo_gateway.tls.certresolver=letsencryptresolver
+        - traefik.http.services.evo_gateway.loadbalancer.server.port=3030
+
+  evo_auth:
+    image: lc1868/evo-auth-service-community:1.0.0
+    command: bash -c "bundle exec rails db:migrate || echo 'Migration errors'; bundle exec rails s -p 3001 -b 0.0.0.0"
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      EVOAI_CRM_API_TOKEN: ${EVOAI_CRM_API_TOKEN}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      REDIS_URL: ${REDIS_URL}
+      FRONTEND_URL: https://${FRONTEND_DOMAIN}
+      BACKEND_URL: https://${API_DOMAIN}
+      DOORKEEPER_JWT_SECRET_KEY: ${DOORKEEPER_JWT_SECRET_KEY}
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  evo_crm:
+    image: lc1868/evo-ai-crm-community:1.0.0
+    command: sh -c "bundle exec rails db:migrate || echo 'Migration errors'; bundle exec rails s -p 3000 -b 0.0.0.0"
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      EVOAI_CRM_API_TOKEN: ${EVOAI_CRM_API_TOKEN}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      REDIS_URL: ${REDIS_URL}
+      EVO_AUTH_SERVICE_URL: http://evo_auth:3001
+      EVO_AI_CORE_SERVICE_URL: http://evo_core:5555
+      BACKEND_URL: https://${API_DOMAIN}
+      FRONTEND_URL: https://${FRONTEND_DOMAIN}
+      BOT_RUNTIME_URL: http://evo_bot_runtime:8080
+      BOT_RUNTIME_SECRET: ${BOT_RUNTIME_SECRET}
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  evo_core:
+    image: lc1868/evo-ai-core-service-community:1.0.0
+    environment:
+      DB_HOST: ${POSTGRES_HOST}
+      DB_USER: ${POSTGRES_USERNAME}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DATABASE}
+      PORT: "5555"
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  evo_processor:
+    image: lc1868/evo-ai-processor-community:1.0.0
+    environment:
+      POSTGRES_CONNECTION_STRING: ${PROCESSOR_POSTGRES_CONNECTION_STRING}
+      REDIS_HOST: ${PROCESSOR_REDIS_HOST}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      EVOAI_CRM_API_TOKEN: ${EVOAI_CRM_API_TOKEN}
+      EVO_AI_CRM_URL: http://evo_crm:3000
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  evo_bot_runtime:
+    image: lc1868/evo-bot-runtime:1.0.0
+    environment:
+      LISTEN_ADDR: "0.0.0.0:8080"
+      REDIS_URL: ${REDIS_URL}
+      BOT_RUNTIME_SECRET: ${BOT_RUNTIME_SECRET}
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  evo_frontend:
+    image: lc1868/evo-ai-frontend-community:1.0.0
+    environment:
+      VITE_API_URL: https://${API_DOMAIN}
+      VITE_AUTH_API_URL: https://${API_DOMAIN}
+      VITE_APP_ENV: "production"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network_swarm_public
+        - traefik.http.routers.evo_frontend.rule=Host(`${FRONTEND_DOMAIN}`)
+        - traefik.http.routers.evo_frontend.entrypoints=websecure
+        - traefik.http.routers.evo_frontend.tls.certresolver=letsencryptresolver
+        - traefik.http.services.evo_frontend.loadbalancer.server.port=80
+
+networks:
+  network_swarm_public:
+    external: true

@@ -1,0 +1,26 @@
+version: "3.8"
+
+# =============================================================================
+# Evo CRM Community — Stack de CACHE (Redis)
+# =============================================================================
+
+services:
+  cache: # Nome do serviço diferente da stack
+    image: redis:latest
+    command: redis-server --appendonly yes
+    volumes:
+      - evo-crm-redis-data:/data
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+
+networks:
+  network_swarm_public:
+    external: true
+
+volumes:
+  evo-crm-redis-data:
+    driver: local

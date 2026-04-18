@@ -1,23 +1,138 @@
 version: "3.8"
 
-# Overlay local para Swarm.
-# Use este arquivo para ajustar imagens, variaveis ou servicos sem mexer no stack de origem.
+# =============================================================================
+# Evo CRM Community — Versão POPULADA — AJUSTE DE HOSTS FINAIS
+# =============================================================================
 
 services:
+  # Gateway - Nginx
   evo_gateway:
-    image: luizcc87/evo-crm-gateway:1.0.0-uazapi
+    image: lc1868/evo-crm-gateway:1.0.0
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network_swarm_public
+        - traefik.http.routers.evo_gateway.rule=Host(`api.voce.com`)
+        - traefik.http.routers.evo_gateway.entrypoints=websecure
+        - traefik.http.routers.evo_gateway.tls.certresolver=letsencryptresolver
+        - traefik.http.services.evo_gateway.loadbalancer.server.port=3030
 
+  # Auth Service
   evo_auth:
-    image: luizcc87/evo-auth-service-community:1.0.0-uazapi
+    image: lc1868/evo-auth-service-community:1.0.0
+    command: bash -c "bundle exec rails db:migrate || echo 'Migration errors'; bundle exec rails s -p 3001 -b 0.0.0.0"
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: "5f6c823a9d1b4e2f8c5a3d7e9b0c2a4f6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f4a5b"
+      JWT_SECRET_KEY: "9a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f"
+      EVOAI_CRM_API_TOKEN: "evo_token_3a1b4c5d6e7f8g9h0i1j2k3l"
+      POSTGRES_HOST: "evo-crm-db_postgres"
+      POSTGRES_PORT: 5432
+      POSTGRES_USERNAME: "evo_user"
+      POSTGRES_PASSWORD: "EvoPass_2026_!@#"
+      POSTGRES_DATABASE: "evo_community"
+      REDIS_URL: "redis://evo-crm-redis_cache:6379/1"
+      FRONTEND_URL: "https://crm.voce.com"
+      BACKEND_URL: "https://api.voce.com"
+      DOORKEEPER_JWT_SECRET_KEY: "f1e2d3c4b5a697887766554433221100aabbccddeeffeeddccbbaa0099887766"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
 
+  # CRM Service
   evo_crm:
-    image: luizcc87/evo-crm:1.0.0-uazapi
+    image: lc1868/evo-ai-crm-community:1.0.0
+    command: sh -c "bundle exec rails db:migrate || echo 'Migration had errors'; bundle exec rails s -p 3000 -b 0.0.0.0"
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: "5f6c823a9d1b4e2f8c5a3d7e9b0c2a4f6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f4a5b"
+      JWT_SECRET_KEY: "9a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f"
+      EVOAI_CRM_API_TOKEN: "evo_token_3a1b4c5d6e7f8g9h0i1j2k3l"
+      POSTGRES_HOST: "evo-crm-db_postgres"
+      POSTGRES_USERNAME: "evo_user"
+      POSTGRES_PASSWORD: "EvoPass_2026_!@#"
+      POSTGRES_DATABASE: "evo_community"
+      REDIS_URL: "redis://evo-crm-redis_cache:6379/1"
+      EVO_AUTH_SERVICE_URL: "http://evo_auth:3001"
+      EVO_AI_CORE_SERVICE_URL: "http://evo_core:5555"
+      BACKEND_URL: "https://api.voce.com"
+      FRONTEND_URL: "https://crm.voce.com"
+      BOT_RUNTIME_URL: "http://evo_bot_runtime:8080"
+      BOT_RUNTIME_SECRET: "bot_runtime_sec_7x8y9z0a1b2c3d4e5f"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
 
+  # Core Service
   evo_core:
-    image: luizcc87/evo-ai-core-service-community:1.0.0-uazapi
+    image: lc1868/evo-ai-core-service-community:1.0.0
+    environment:
+      DB_HOST: "evo-crm-db_postgres"
+      DB_PORT: "5432"
+      DB_USER: "evo_user"
+      DB_PASSWORD: "EvoPass_2026_!@#"
+      DB_NAME: "evo_community"
+      DB_SSLMODE: "disable"
+      PORT: "5555"
+      SECRET_KEY_BASE: "5f6c823a9d1b4e2f8c5a3d7e9b0c2a4f6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f4a5b"
+      JWT_SECRET_KEY: "9a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f"
+      ENCRYPTION_KEY: "32_chars_key_for_aes_encryption_!"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
 
+  # Processor Service
   evo_processor:
-    image: luizcc87/evo-ai-processor-community:1.0.0-uazapi
+    image: lc1868/evo-ai-processor-community:1.0.0
+    environment:
+      POSTGRES_CONNECTION_STRING: "postgresql://evo_user:EvoPass_2026_!@#@evo-crm-db_postgres:5432/evo_community?sslmode=disable"
+      REDIS_HOST: "evo-crm-redis_cache"
+      SECRET_KEY_BASE: "5f6c823a9d1b4e2f8c5a3d7e9b0c2a4f6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f4a5b"
+      ENCRYPTION_KEY: "32_chars_key_for_aes_encryption_!"
+      EVOAI_CRM_API_TOKEN: "evo_token_3a1b4c5d6e7f8g9h0i1j2k3l"
+      EVO_AI_CRM_URL: "http://evo_crm:3000"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
 
+  # Bot Runtime
   evo_bot_runtime:
-    image: luizcc87/evo-bot-runtime:1.0.0-uazapi
+    image: lc1868/evo-bot-runtime:1.0.0
+    environment:
+      LISTEN_ADDR: "0.0.0.0:8080"
+      REDIS_URL: "redis://evo-crm-redis_cache:6379/1"
+      BOT_RUNTIME_SECRET: "bot_runtime_sec_7x8y9z0a1b2c3d4e5f"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+
+  # Frontend
+  evo_frontend:
+    image: lc1868/evo-ai-frontend-community:1.0.0
+    environment:
+      VITE_API_URL: "https://api.voce.com"
+      VITE_AUTH_API_URL: "https://api.voce.com"
+      VITE_APP_ENV: "production"
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network_swarm_public
+        - traefik.http.routers.evo_frontend.rule=Host(`crm.voce.com`)
+        - traefik.http.routers.evo_frontend.entrypoints=websecure
+        - traefik.http.routers.evo_frontend.tls.certresolver=letsencryptresolver
+        - traefik.http.services.evo_frontend.loadbalancer.server.port=80
+
+networks:
+  network_swarm_public:
+    external: true

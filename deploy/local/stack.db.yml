@@ -1,0 +1,32 @@
+version: "3.8"
+
+# =============================================================================
+# Evo CRM Community — Stack de BANCO DE DADOS (PostgreSQL)
+# =============================================================================
+
+services:
+  postgres: # Nome do serviço diferente da stack
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: evo_user
+      POSTGRES_PASSWORD: "EvoPass_2026_!@#"
+      POSTGRES_DB: evo_community
+    volumes:
+      - evo-crm-db-data:/var/lib/postgresql/data
+    networks:
+      - network_swarm_public
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: any
+
+networks:
+  network_swarm_public:
+    external: true
+
+volumes:
+  evo-crm-db-data:
+    driver: local
