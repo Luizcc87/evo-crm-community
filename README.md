@@ -31,6 +31,7 @@ This repository is the **monorepo entrypoint**: it aggregates all community serv
 
 For operational deployment and fork maintenance, see [README-OPERACOES.md](./README-OPERACOES.md).
 Local customizations and notes follow the convention documented in [docs/local/README.md](./docs/local/README.md) and [deploy/local/README.md](./deploy/local/README.md).
+Repository context lives in [CONTEXT.md](./CONTEXT.md) and agent guardrails live in [AGENTS.md](./AGENTS.md).
 
 ---
 
