@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/crm/all",
+    "params": "nenhum",
+    "test_file": "test_vendas.py::test_listar_crms",
+    "executado_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "id_crm é usado no campo id_crm ao criar prospectos via POST /api/v1/integracao/prospecto.",
+      "Os CRMs são configurados no painel HubSoft — variam por tenant.",
+      "Retorna todos os CRMs ativos do tenant sem paginação."
+    ]
+  },
+  "status": "success",
+  "msg": "Dados consultados com sucesso",
+  "crms": [
+    {
+      "id_crm": 4,
+      "nome": "CRM - VENDAS"
+    },
+    {
+      "id_crm": 16,
+      "nome": "COMERCIAL"
+    },
+    {
+      "id_crm": 17,
+      "nome": "PÓS VENDA"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/cliente/ordem_servico",
+    "params": "busca=cpf_cnpj&termo_busca=<cpf>",
+    "test_file": "test_suporte.py::test_listar_os_do_cliente",
+    "executado_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "numero_ordem_servico é o número exibido ao cliente (não o id interno).",
+      "status pode ser: aberta, em_andamento, finalizado, cancelado.",
+      "status_fechamento: concluido, sem_solucao, reagendado.",
+      "tecnicos[] lista os técnicos vinculados — pode ser vazio antes da designação.",
+      "disponibilidade[] informa períodos do dia disponíveis para atendimento (manha/tarde/noite).",
+      "descricao_fechamento aparece apenas em OS finalizadas."
+    ]
+  },
+  "status": "success",
+  "msg": "Dados consultados com sucesso",
+  "ordens_servico": [
+    {
+      "id_ordem_servico": 7562,
+      "numero_ordem_servico": "7669",
+      "data_cadastro": "15/02/2024 16:32:17",
+      "tipo": "MAN. INTERNET",
+      "data_inicio_programado": "15/02/2024 17:00:00",
+      "data_termino_programado": "15/02/2024 18:00:00",
+      "data_inicio_executado": "15/02/2024 17:00:00",
+      "data_termino_executado": "15/02/2024 18:00:00",
+      "descricao_abertura": "Relato do cliente sobre o problema.",
+      "descricao_servico": "Relato do cliente sobre o problema.",
+      "descricao_fechamento": "Descrição do serviço executado pelo técnico.",
+      "usuario_abertura": "ATENDENTE RESPONSÁVEL",
+      "usuario_fechamento": "TÉCNICO RESPONSÁVEL",
+      "status": "finalizado",
+      "status_fechamento": "concluido",
+      "cliente": {
+        "codigo_cliente": 1888,
+        "nome_razaosocial": "NOME DO CLIENTE",
+        "cpf_cnpj": "***.***.***-**"
+      },
+      "servico": {
+        "id_cliente_servico": 2491,
+        "numero_plano": 0,
+        "nome": "PLANO_NOME",
+        "valor": 120,
+        "status": "Serviço Habilitado",
+        "status_prefixo": "servico_habilitado"
+      },
+      "disponibilidade": [
+        {
+          "id_periodo_dia": 4,
+          "descricao": "Manhã",
+          "prefixo": "manha",
+          "hora_inicio": "06:00:00",
+          "hora_fim": "11:59:59"
+        },
+        {
+          "id_periodo_dia": 5,
+          "descricao": "Tarde",
+          "prefixo": "tarde",
+          "hora_inicio": "12:00:00",
+          "hora_fim": "17:59:59"
+        }
+      ],
+      "tecnicos": [
+        {
+          "id": 55,
+          "name": "NOME DO TÉCNICO",
+          "email": "tecnico@provedor.com.br"
+        }
+      ]
+    }
+  ]
+}

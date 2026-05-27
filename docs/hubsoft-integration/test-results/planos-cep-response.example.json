@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/prospecto/create",
+    "params": "cep=35560000",
+    "test_file": "test_vendas.py::test_planos_por_cep",
+    "notes": "Retorna planos disponíveis para a unidade de negócio do CEP. Não comprova viabilidade física (porta/CTO). Usar como pré-filtro e confirmar com validação comercial."
+  },
+  "status": "success",
+  "servicos": [
+    {
+      "id_servico": 1330,
+      "descricao": "500MB FIBRA",
+      "valor": 254.9,
+      "velocidade_download": 500,
+      "velocidade_upload": 250
+    },
+    {
+      "id_servico": 1331,
+      "descricao": "1GB FIBRA",
+      "valor": 349.9,
+      "velocidade_download": 1000,
+      "velocidade_upload": 500
+    }
+  ]
+}

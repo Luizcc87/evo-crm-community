@@ -1,0 +1,10 @@
+{
+  "_meta": {
+    "endpoint": "POST /oauth/token",
+    "test_file": "test_auth.py::test_auth_response_fields",
+    "notes": "expires_in em segundos; 2592000 = 30 dias. Renovar ao receber 401 ou quando expirado."
+  },
+  "token_type": "Bearer",
+  "expires_in": 2592000,
+  "access_token": "<token-omitido>"
+}

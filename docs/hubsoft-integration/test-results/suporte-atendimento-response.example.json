@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "endpoint": "POST /api/v1/integracao/atendimento",
+    "test_file": "test_suporte.py::test_abrir_atendimento_com_os",
+    "notes": "Execute apenas contra sandbox. protocolo é o número exibido ao cliente. ordens_servico[] só aparece quando abrir_os=true.",
+    "status": "SKIPPED em ambiente produção — executar manualmente contra sandbox"
+  },
+  "status": "success",
+  "id_atendimento": 9901,
+  "protocolo": "202605270001",
+  "ordens_servico": [
+    {
+      "id_ordem_servico": 4401,
+      "numero_ordem_servico": "OS-2026-4401",
+      "status": "Aguardando",
+      "tecnico": null
+    }
+  ]
+}
