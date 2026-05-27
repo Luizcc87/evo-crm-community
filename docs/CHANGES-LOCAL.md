@@ -14,6 +14,24 @@ Formato de entrada:
 
 ---
 
+## [2026-05-27] White-label visível sem logo customizado
+
+### Submodule `evo-ai-frontend-community` → fork `Luizcc87/evo-ai-frontend-community`
+
+- **Arquivos**: `Dockerfile`, `src/branding/config.ts`, `src/components/AppLogo.tsx`, `src/main.tsx`, `src/branding/config.spec.ts` `[PATCH]`
+  - Motivo: Com `APP_NAME`/`APP_TITLE` definidos e `APP_LOGO_URL` vazio, o `<title>` era substituído, mas a UI continuava mostrando o SVG padrão `EVO_CRM`. Agora, quando há nome customizado sem logo customizada, o `AppLogo` renderiza o nome da marca como wordmark e o favicon é aplicado com fallback. O `Dockerfile` também força o build Node no `$BUILDPLATFORM` para evitar travamento do `npm run build` arm64 via emulação QEMU no build multiarch.
+  - Conflito no sync: médio — `Dockerfile` e `AppLogo.tsx` são arquivos upstream já customizados; `src/branding/*` é área local de baixo risco.
+  - Branch: `develop`
+
+### Orquestrador (`Luizcc87/evo-crm-community`)
+
+- **Arquivo**: `docs/local/stack-swarm-vps.yaml`
+  - Motivo: Stack Portainer já passa `APP_NAME`/`APP_TITLE`; após rebuild da imagem frontend, esses valores ativam o white-label visual mesmo sem `APP_LOGO_URL`.
+  - Conflito no sync: não — arquivo local.
+  - Branch: `docs/proxy-health-logs`
+
+---
+
 ## [2026-05-25] Evolution Go proxy no Configurar Canal
 
 ### Submodule `evo-ai-frontend-community` → fork `Luizcc87/evo-ai-frontend-community`

@@ -274,7 +274,7 @@ services:
   # Frontend (React / Vite)
   # ---------------------------------------------------------------------------
   evo_frontend:
-    image: lc1868/evo-ai-frontend-community:latest
+    image: lc1868/evo-ai-frontend-community:v1.0.0-rc4-whitelabel3
     environment:
       VITE_APP_ENV: "production"
       VITE_API_URL: "https://apievocrm.l2csolucoes.com.br"
@@ -283,6 +283,14 @@ services:
       VITE_EVOAI_API_URL: "https://apievocrm.l2csolucoes.com.br"
       VITE_EVOFLOW_API_URL: "https://apievocrm.l2csolucoes.com.br"
       VITE_AGENT_PROCESSOR_URL: "https://apievocrm.l2csolucoes.com.br"
+      # ── White Label — runtime injection no boot do container ──
+      APP_NAME: "CRM L2C Solucoes"
+      APP_TITLE: "CRM L2C Solucoes"
+      APP_LOGO_URL: ""
+      APP_FAVICON_URL: ""
+      APP_DOCS_URL: ""
+      APP_SUPPORT_URL: ""
+      APP_COPYRIGHT: ""
     networks:
       - network_swarm_public
     deploy:
