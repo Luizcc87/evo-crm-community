@@ -82,15 +82,69 @@ Para cada tool listada no prompt do agente, crie uma entrada apontando para o en
 
 > Consulte `docs/hubsoft-integration/test-results/README.md` para a lista completa de endpoints e parâmetros validados.
 
-**Tools por agente:**
+**Custom Tools HTTP por agente:**
 
-| Agente | Tools |
+| Agente | Custom Tools HTTP |
 |---|---|
 | Suporte Técnico | `get_cliente_by_id_servico`, `get_ultima_conexao`, `get_extrato_conexao`, `get_tipo_atendimento_by_nome`, `abrir_os_suporte`, `transferir_para_humano` |
 | Financeiro | `get_cliente_by_cpf_cnpj`, `get_cliente_by_codigo`, `get_faturas_pendentes`, `desbloquear_por_confianca`, `transferir_para_humano` |
-| Vendas Fibra | `get_planos_fibra`, `transferir_para_humano` |
-| Vendas Móvel | `get_planos_movel`, `transferir_para_humano` |
-| Retenção | `get_cliente_by_id_servico`, `registrar_renegociacao`, `get_tipo_atendimento_by_nome`, `abrir_os_cancelamento` |
+| Vendas Fibra | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
+| Vendas Móvel | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
+| Retenção | `get_cliente_by_id_servico`, `registrar_renegociacao`, `get_tipo_atendimento_by_nome`, `abrir_os_cancelamento`, `transferir_para_humano` |
+
+### 1.8 Vincular Produtos ao Catálogo (Vendas Fibra e Vendas Móvel)
+
+Os agentes de Vendas usam a **Native Tool `link_product_to_pipeline_item`**, que é ativada automaticamente quando produtos são vinculados ao agente. O catálogo é injetado no contexto em runtime — sem precisar de Custom Tool HTTP para listar planos.
+
+**Para cada agente de Vendas (Fibra e Móvel):**
+
+1. Na tela do agente, acesse a aba **Produtos**
+2. Selecione os produtos do catálogo Evo CRM correspondentes ao agente:
+   - **Vendas Fibra**: planos com categoria `fibra-residencial` e `fibra-empresarial`
+   - **Vendas Móvel**: planos com categoria `movel`
+3. Clique em **Save**
+
+> Apenas produtos com status `ativo` aparecem na seleção. O SKU do produto deve ser o `id_servico` do HubSoft.
+> Mudanças no catálogo refletem na próxima conversa sem reconfigurar o prompt.
+
+### 1.9 Configurações Avançadas (Configuration)
+
+Acesse **⋯ Actions → Edit → Configuration** para cada agente:
+
+**Aba General:**
+
+| Configuração | Valor recomendado | Motivo |
+|---|---|---|
+| Language Model | `gpt-4.1-mini` | Custo-benefício para ISP |
+| Message Wait Time | `3 segundos` | Usuários WhatsApp fragmentam mensagens |
+| Enable text segmentation | `Ativo` | Divide respostas longas em múltiplas mensagens |
+
+**Aba System — Permissões por agente:**
+
+| Permissão | ORQ | SUP | FIN | VF | VM | RET |
+|---|---|---|---|---|---|---|
+| Allow human escalation | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Allow pipeline manipulation | — | — | — | ✅ | ✅ | ✅ |
+| Allow manage labels | ✅ | — | — | — | — | — |
+| Allow editing contacts | — | — | — | — | — | — |
+| Agent Timezone | `America/Sao_Paulo` | todos | todos | todos | todos | todos |
+
+> **Segurança:** ative apenas as permissões necessárias. Financeiro e Suporte não precisam manipular pipeline.
+
+**Aba Inactivity Actions — regras para todos os agentes:**
+
+| Tempo | Ação | Mensagem |
+|---|---|---|
+| 5 minutos | Interact with client | `"Ainda está por aí? Posso ajudar com algo mais? 😊"` |
+| 30 minutos | Transfer to human | `"Vou chamar um atendente para continuar te ajudando."` |
+
+**Native Tools automáticas (v1.0.0-rc3+):**
+
+| Tool | Ativação | Agentes que devem usar |
+|---|---|---|
+| `link_product_to_pipeline_item` | Vincular produtos na aba Produtos | Vendas Fibra, Vendas Móvel |
+| `manage_conversation_labels` | Toggle "Permitir gerenciar labels" | Orquestrador |
+| `knowledge_nexus_search` | Vincular space Nexus | Opcional (base de conhecimento) |
 
 ---
 
