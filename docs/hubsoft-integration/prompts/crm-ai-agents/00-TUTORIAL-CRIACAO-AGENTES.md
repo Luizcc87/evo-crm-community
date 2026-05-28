@@ -1,70 +1,167 @@
 # Tutorial: Como Criar a Árvore de Agentes no Evo CRM
 
-Este guia passo-a-passo ensina como configurar os agentes baseados nos prompts encontrados nesta pasta, criando um sistema de roteamento inteligente (Orquestrador -> Especialistas).
+Este guia ensina como configurar os agentes de IA para integração HubSoft × Evo CRM, criando um sistema de roteamento inteligente (Orquestrador → Especialistas) usando o wizard nativo do Evo CRM.
+
+> **Modelo recomendado:** GPT-4.1-mini (function calling nativo, custo-benefício adequado para ISP)
+
+---
 
 ## Regra de Ouro: De Trás para Frente
-Para que o Orquestrador possa direcionar o atendimento, **os Sub-agentes Especialistas precisam existir primeiro**. O Evo CRM não permite criar uma regra de transferência para um agente que ainda não foi cadastrado.
 
-Portanto, a ordem de criação na plataforma deve ser:
-1. Criar os Sub-agentes (02 a 06).
-2. Criar o Orquestrador (01) e conectá-lo aos Sub-agentes.
+O Orquestrador precisa dos Sub-agentes já existentes para configurar o roteamento via **Sub Agents**. Portanto:
 
----
-
-## Passo 1: Criação dos Sub-agentes (Especialistas)
-
-Para cada um dos arquivos numerados de `02` a `06`, repita este processo no painel do Evo CRM:
-
-1. Vá no menu de **Criação de Agentes**.
-2. **Tipo de Agente:** Escolha `LLM (Modelo de Linguagem)`. Este é o modelo conversacional que sabe raciocinar e executar funções isoladas.
-3. **Nome:** Nomeie conforme o setor (ex: *Suporte Técnico, Vendas Fibra, Financeiro*).
-4. **Prompt do Sistema:** Abra o arquivo markdown correspondente (ex: `02-agent-prompt-suporte.md`), copie TODO o conteúdo e cole na caixa de "Contexto/Prompt" do agente.
-5. **Ferramentas (Custom Tools):** Para cada ferramenta citada no final do prompt (ex: `get_faturas_pendentes`), adicione a ferramenta/API correspondente conectada ao backend do HubSoft.
-
-*Repita isso para:*
-- `02-agent-prompt-suporte.md`
-- `03-agent-prompt-financeiro.md`
-- `04-agent-prompt-vendas-fibra.md`
-- `05-agent-prompt-vendas-movel.md`
-- `06-agent-prompt-retencao.md`
+1. Criar Sub-agentes especialistas (02 a 06) primeiro
+2. Criar o Orquestrador (01) e conectá-lo aos Sub-agentes
 
 ---
 
-## Passo 2: Criação do Orquestrador (Recepcionista)
+## Passo 1: Criar os Sub-agentes Especialistas
 
-Agora que todos os especialistas estão prontos e salvos no Evo CRM, vamos criar a inteligência que distribui as conversas.
+Repita o processo abaixo para cada arquivo `02` a `06`:
 
-1. Vá no menu de **Criação de Agentes**.
-2. **Tipo de Agente:** Aqui você tem duas escolhas boas baseadas no Evo CRM:
-   - **Opção A (Mais Comum):** `LLM (Modelo de Linguagem)`. Um agente conversacional normal que tem acesso a "Ferramentas de Transferência" (Function Calling para transferir o chat).
-   - **Opção B (Estruturado):** `Tarefa`. Um agente focado unicamente em ler a intenção e orquestrar sub-agentes.
-   *(Recomendamos iniciar com **LLM** usando ferramentas de transferência, pois é mais fluído no WhatsApp).*
-3. **Nome:** `Recepcionista Virtual` ou `Orquestrador`.
-4. **Prompt do Sistema:** Copie o conteúdo do arquivo `01-agent-prompt-orquestrador.md` e cole na configuração.
-5. **Configuração de Roteamento (Sub-agentes):**
-   - Na seção de Ferramentas/Skills do agente, você deve habilitar a chamada aos sub-agentes criados no Passo 1.
-   - O Evo CRM fará com que comandos como `transferir_para_suporte` enviem a transcrição atual do cliente para o agente "Suporte Técnico".
+### 1.1 Abrir o wizard
+
+Acesse **Agentes** → clique em **Novo Agente** (canto superior direito ou centro da tela vazia).
+
+### 1.2 Nome do agente
+
+| Arquivo | Nome recomendado |
+|---|---|
+| `02-agent-prompt-suporte.md` | `Suporte Técnico` |
+| `03-agent-prompt-financeiro.md` | `Financeiro` |
+| `04-agent-prompt-vendas-fibra.md` | `Vendas Fibra` |
+| `05-agent-prompt-vendas-movel.md` | `Vendas Móvel` |
+| `06-agent-prompt-retencao.md` | `Retenção` |
+
+Clique em **Continue**.
+
+### 1.3 Tipo de agente
+
+Selecione **LLM (Language Model)** → clique em **Continuar**.
+
+> Este é o tipo conversacional que suporta function calling — obrigatório para integração com HubSoft.
+
+### 1.4 Função e Objetivo (Agent Role / Main Goal)
+
+Preencha conforme o agente ou clique em **Skip** — as instruções completas virão no próximo passo.
+
+### 1.5 Instruções (System Prompt)
+
+No campo **"What does your agent do?"**:
+- Abra o arquivo `.md` correspondente
+- Copie **todo o conteúdo** do arquivo
+- Cole no campo de instruções
+
+Clique em **Save** (ou **Generate with AI** para revisar antes).
+
+### 1.6 Modelo de IA
+
+1. Clique em **Manage** para configurar a API Key (se ainda não configurada):
+   - **Name**: `OpenAI Production`
+   - **Provider**: `OpenAI`
+   - **Key**: sua chave OpenAI
+   - Clique em **Add**
+2. No campo **Search or select a model**, selecione `gpt-4.1-mini`
+3. Clique em **Continue** → **Create Agent**
+
+### 1.7 Configurar Custom Tools (Function Calling)
+
+Após criar o agente, acesse **Configuration** → aba **Tools** → seção **Custom Tools** → clique em **Add Tool**.
+
+Para cada tool listada no prompt do agente, crie uma entrada apontando para o endpoint HubSoft:
+
+**Exemplo — `get_cliente_by_cpf_cnpj`:**
+
+| Campo | Valor |
+|---|---|
+| Nome | `get_cliente_by_cpf_cnpj` |
+| Método | `GET` |
+| URL | `https://api.log.hubsoft.com.br/api/v1/integracao/cliente` |
+| Header `Authorization` | `Bearer {token}` |
+| Parâmetro `cpf_cnpj` | query param |
+
+> Consulte `docs/hubsoft-integration/test-results/README.md` para a lista completa de endpoints e parâmetros validados.
+
+**Tools por agente:**
+
+| Agente | Tools |
+|---|---|
+| Suporte Técnico | `get_cliente_by_id_servico`, `get_ultima_conexao`, `get_extrato_conexao`, `get_tipo_atendimento_by_nome`, `abrir_os_suporte`, `transferir_para_humano` |
+| Financeiro | `get_cliente_by_cpf_cnpj`, `get_cliente_by_codigo`, `get_faturas_pendentes`, `desbloquear_por_confianca`, `transferir_para_humano` |
+| Vendas Fibra | `get_planos_fibra`, `transferir_para_humano` |
+| Vendas Móvel | `get_planos_movel`, `transferir_para_humano` |
+| Retenção | `get_cliente_by_id_servico`, `registrar_renegociacao`, `get_tipo_atendimento_by_nome`, `abrir_os_cancelamento` |
 
 ---
 
-## Mapa da Integração (Arquitetura)
+## Passo 2: Criar o Orquestrador (Recepcionista)
+
+Após todos os 5 sub-agentes estarem criados e salvos:
+
+### 2.1 Criar o agente
+
+- **Nome:** `Recepcionista Virtual`
+- **Tipo:** `LLM (Language Model)`
+- **Instruções:** conteúdo completo de `01-agent-prompt-orquestrador.md`
+- **Modelo:** `gpt-4.1-mini`
+
+### 2.2 Conectar Sub-agentes
+
+1. No agente **Recepcionista Virtual**, acesse a seção **Sub Agents** (menu lateral)
+2. Busque cada especialista pelo nome
+3. Clique em **Add** para cada um:
+   - `Suporte Técnico`
+   - `Financeiro`
+   - `Vendas Fibra`
+   - `Vendas Móvel`
+   - `Retenção`
+4. Clique em **Save**
+
+> O Evo CRM registra os sub-agentes vinculados e os expõe como tools de transferência para o LLM do Orquestrador. As tools `transferir_para_suporte`, `transferir_para_financeiro`, etc. descritas no prompt passam a funcionar automaticamente.
+
+### 2.3 Configurar tool de fallback
+
+Na aba **Tools** do Orquestrador, adicione a tool `transferir_para_humano` como Custom Tool HTTP apontando para a fila de atendimento humano do Evo CRM.
+
+---
+
+## Passo 3: Testar
+
+1. No agente **Recepcionista Virtual**, clique em **Test your agent**
+2. Envie mensagens de teste para cada intenção:
+   - `"Minha internet caiu"` → deve acionar Suporte Técnico
+   - `"Quero ver minha fatura"` → deve acionar Financeiro
+   - `"Quero contratar internet"` → deve perguntar fibra ou celular
+   - `"Quero cancelar"` → deve acionar Retenção
+3. Valide que cada sub-agente recebe o contexto e chama as tools HubSoft corretamente
+
+---
+
+## Arquitetura
 
 ```mermaid
 graph TD
-    Cliente[Cliente no WhatsApp] -->|Envia Mensagem| ORQ(01. Orquestrador / Recepcionista)
-    
-    ORQ -->|Intenção: Net lenta/Caiu| SUP(02. Suporte Técnico)
-    ORQ -->|Intenção: Fatura/Bloqueio| FIN(03. Financeiro)
-    ORQ -->|Intenção: Assinar net pra casa| VF(04. Vendas Fibra)
-    ORQ -->|Intenção: Fazer portabilidade| VM(05. Vendas Móvel)
-    ORQ -->|Intenção: Quero cancelar| RET(06. Retenção)
-    
-    SUP -->|Precisa de ajuda humana| HUM(Fila de Transbordo Humano)
+    Cliente[Cliente no WhatsApp] -->|Envia Mensagem| ORQ(01. Recepcionista Virtual)
+
+    ORQ -->|Net lenta/Caiu/Sem sinal| SUP(02. Suporte Técnico)
+    ORQ -->|Fatura/Bloqueio/Pagamento| FIN(03. Financeiro)
+    ORQ -->|Contratar internet fibra| VF(04. Vendas Fibra)
+    ORQ -->|Plano celular/Portabilidade| VM(05. Vendas Móvel)
+    ORQ -->|Cancelar/Insatisfação| RET(06. Retenção)
+    ORQ -->|Intenção indefinida após 2 tentativas| HUM(Fila Humana)
+
+    SUP -->|Problema não resolvido| HUM
     FIN -->|Acordo/Desconto complexo| HUM
-    VF -->|Venda complexa/Empresarial| HUM
-    VM -->|Validar doc físico| HUM
-    RET -->|Finalizar contrato/Comodato| HUM
+    VF -->|Resumo SDR finalizado| HUM
+    VM -->|Resumo SDR finalizado| HUM
+    RET -->|Cancelamento confirmado/Multa| HUM
 ```
 
-## Como a IA toma a decisão?
-O Orquestrador analisa apenas a primeira ou segunda frase do cliente. Se o cliente falar "Minha internet não tá funcionando, quero a fatura pra pagar", o Orquestrador usará o raciocínio LLM para definir a prioridade (neste caso, Financeiro para desbloqueio) e acionará a ferramenta `transferir_para_financeiro`. Dali em diante, o agente `03-financeiro` assume e começa a executar os comandos (verificando o HubSoft).
+---
+
+## Referências
+
+- Doc oficial: [Criando um Agente](https://docs.evolutionfoundation.com.br/user-guides/agents/creating-agent)
+- Doc oficial: [Configuração do Agente](https://docs.evolutionfoundation.com.br/user-guides/agents/agent-configuration)
+- Endpoints HubSoft validados: `docs/hubsoft-integration/test-results/README.md`
+- Postman Collection: `docs/hubsoft-integration/Hubsoft API.postman_collection.json`
