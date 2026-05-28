@@ -92,19 +92,25 @@ Para cada tool listada no prompt do agente, crie uma entrada apontando para o en
 | Vendas Móvel | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
 | Retenção | `get_cliente_by_id_servico`, `registrar_renegociacao`, `get_tipo_atendimento_by_nome`, `abrir_os_cancelamento`, `transferir_para_humano` |
 
-### 1.8 Vincular Produtos ao Catálogo (Vendas Fibra e Vendas Móvel)
+### 1.8 Cadastrar Produtos e Vincular ao Agente (Vendas Fibra e Vendas Móvel)
 
-Os agentes de Vendas usam a **Native Tool `link_product_to_pipeline_item`**, que é ativada automaticamente quando produtos são vinculados ao agente. O catálogo é injetado no contexto em runtime — sem precisar de Custom Tool HTTP para listar planos.
+Os agentes de Vendas usam a **Native Tool `link_product_to_pipeline_item`**, ativada automaticamente quando produtos são vinculados ao agente. O catálogo é injetado no contexto em runtime — sem Custom Tool HTTP para listar planos.
 
-**Para cada agente de Vendas (Fibra e Móvel):**
+**Pré-requisito:** cadastrar os planos ISP no módulo Produtos antes de vincular.
 
-1. Na tela do agente, acesse a aba **Produtos**
-2. Selecione os produtos do catálogo Evo CRM correspondentes ao agente:
-   - **Vendas Fibra**: planos com categoria `fibra-residencial` e `fibra-empresarial`
-   - **Vendas Móvel**: planos com categoria `movel`
-3. Clique em **Save**
+> Guia completo de cadastro: `07-catalogo-produtos-isp.md`
 
-> Apenas produtos com status `ativo` aparecem na seleção. O SKU do produto deve ser o `id_servico` do HubSoft.
+**Resumo rápido:**
+1. Menu → **Produtos** → **Novo Produto** para cada plano vendável
+   - **Nome**: nome comercial do plano
+   - **SKU**: `id_servico` do HubSoft (ver `GET /api/v1/integracao/configuracao/servico`)
+   - **Descrição**: benefícios para o pitch de up-sell
+   - **Preço**: valor mensal
+   - **Status**: `Ativo`
+2. No agente, aba **Produtos** → selecione os planos correspondentes → **Save**
+   - **Vendas Fibra**: planos fibra residencial + empresarial
+   - **Vendas Móvel**: planos telefonia móvel
+
 > Mudanças no catálogo refletem na próxima conversa sem reconfigurar o prompt.
 
 ### 1.9 Configurações Avançadas (Configuration)
