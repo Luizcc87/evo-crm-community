@@ -77,14 +77,15 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 
 **`get_cliente_by_cpf`**
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
-- Headers HTTP:
+- Headers HTTP (tudo em uma linha, sem quebra):
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "cpf_cnpj": "{cpf_cnpj}" }
+{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}"}
 ```
+> A API HubSoft usa dois parâmetros: `busca` = tipo fixo, `termo_busca` = valor dinâmico.
 
 ---
 
@@ -92,11 +93,11 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 - Método: `GET` | Endpoint: `/api/v1/integracao/financeiro/fatura`
 - Headers HTTP:
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "id_cliente_servico": "{id_cliente_servico}", "apenas_pendente": "sim" }
+{"id_cliente_servico":"{id_cliente_servico}","apenas_pendente":"sim"}
 ```
 
 ---
@@ -105,11 +106,11 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
 - Headers HTTP:
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "id_cliente_servico": "{id_cliente_servico}", "ultima_conexao": "sim" }
+{"id_cliente_servico":"{id_cliente_servico}","ultima_conexao":"sim"}
 ```
 
 ---
@@ -118,18 +119,18 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 - Método: `GET` | Endpoint: `/api/v1/integracao/suporte/extrato_conexao`
 - Headers HTTP:
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "id_cliente_servico": "{id_cliente_servico}" }
+{"id_cliente_servico":"{id_cliente_servico}"}
 ```
 
 ---
 
 **`get_tipo_atendimento_by_nome`**
 - Método: `GET` | Endpoint: `/api/v1/integracao/configuracao/tipo_atendimento`
-- Headers HTTP:
+- Headers HTTP (uma linha):
 ```json
 { "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
 ```
@@ -162,17 +163,17 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 
 #### Tools do Agente Financeiro
 
-**`get_cliente_by_cpf_cnpj`** — igual a `get_cliente_by_cpf` acima.
+**`get_cliente_by_cpf_cnpj`** — mesma config de `get_cliente_by_cpf` acima (Query: `{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}"}`).
 
 **`get_cliente_by_codigo`**
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
 - Headers HTTP:
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "codigo_cliente": "{codigo_cliente}" }
+{"busca":"codigo_cliente","termo_busca":"{codigo_cliente}"}
 ```
 
 **`desbloquear_por_confianca`** (`request_desbloqueio_confianca`)
@@ -191,11 +192,11 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
 - Headers HTTP:
 ```json
-{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
 - Parâmetros de Query:
 ```json
-{ "id_cliente_servico": "{id_cliente_servico}" }
+{"id_cliente_servico":"{id_cliente_servico}"}
 ```
 
 **`registrar_renegociacao`**
