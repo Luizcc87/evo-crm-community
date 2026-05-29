@@ -32,6 +32,20 @@ Formato de entrada:
 - **Motivo**: hotfix de binding de parâmetros para Custom Tools HTTP.
 - **Stack atualizado**: `docs/local/stack-swarm-vps.yaml` já usa `lc1868/evo-ai-processor-community:latest`; o script também publicará `latest`.
 
+### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
+
+- **Arquivos**: `src/services/adk/tool_builder.py`, `src/services/adk/custom_tools.py` `[PATCH]`
+  - Motivo: teste real ainda mostrava `Args: {}`. A inferência do ADK pode ignorar `__signature__` em função variádica `**kwargs`.
+  - Fix: gerar função Python explícita por tool, por exemplo `get_cliente_by_cpf(cpf_cnpj: str)`, antes de criar `FunctionTool`. Também sanitiza header `Authorization: Bearer ...` removendo whitespace interno do token colado.
+  - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
+  - Branch: `develop`
+
+### Docker publish planejado
+
+- **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools2`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Motivo**: publicar reforço do hotfix para o schema de Function Calling das Custom Tools HTTP.
+
 ---
 
 ## [2026-05-27] White-label visível sem logo customizado
