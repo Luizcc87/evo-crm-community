@@ -40,11 +40,12 @@ Formato de entrada:
   - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
   - Branch: `develop`
 
-### Docker publish planejado
+### Docker publish
 
 - **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools2`
 - **Plataformas**: linux/amd64 + linux/arm64
-- **Motivo**: publicar reforço do hotfix para o schema de Function Calling das Custom Tools HTTP.
+- **Digest**: `sha256:6332d5af4aba4de42094f0037317798d63d3f5089ae48eba62842bdc61989160`
+- **Motivo**: reforço do hotfix para o schema de Function Calling das Custom Tools HTTP.
 
 ---
 
