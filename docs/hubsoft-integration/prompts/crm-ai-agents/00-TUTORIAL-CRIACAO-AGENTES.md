@@ -68,7 +68,7 @@ Clique em **Save** (ou **Generate with AI** para revisar antes).
 
 Após criar o agente, acesse **Configuration** → aba **Tools** → seção **Custom Tools** → clique em **Add Tool**.
 
-> **Token HubSoft:** é fixo (gerado manualmente). Substitua `SEU_TOKEN_HUBSOFT` pelo token real em todas as tools.
+> **Token HubSoft:** gere via `POST /oauth/token` usando as credenciais do tenant HubSoft e substitua `SEU_TOKEN_HUBSOFT` pelo `access_token` atual em todas as tools. O token expira (`expires_in`); ao receber 401 `Unauthenticated`, gere um novo token e atualize os headers das tools.
 > Base URL: `https://api.log.hubsoft.com.br`
 
 ---

@@ -14,6 +14,25 @@ Formato de entrada:
 
 ---
 
+## [2026-05-29] Correção de Custom Tools HTTP para agentes de IA
+
+### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
+
+- **Arquivos**: `src/services/adk/tool_builder.py`, `src/services/adk/custom_tools.py` `[PATCH]`
+  - Motivo: custom tools HTTP eram expostas ao ADK como função `**kwargs`, o que permitia schema sem propriedades e fazia o LLM chamar tools como `get_cliente_by_cpf` com `Args: {}`. Também não havia substituição de placeholders em valores de query como `{"termo_busca":"{cpf_cnpj}"}`.
+  - Fix: extração de placeholders `{param}`, assinatura dinâmica keyword-only para o ADK inferir parâmetros como `cpf_cnpj`, e substituição de placeholders em endpoint, headers, query params, listas e defaults de body.
+  - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
+  - Branch: `develop`
+
+### Docker publish planejado
+
+- **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Motivo**: publicar hotfix de binding de parâmetros para Custom Tools HTTP.
+- **Stack atualizado**: `docs/local/stack-swarm-vps.yaml` já usa `lc1868/evo-ai-processor-community:latest`; o script também publicará `latest`.
+
+---
+
 ## [2026-05-27] White-label visível sem logo customizado
 
 ### Submodule `evo-ai-frontend-community` → fork `Luizcc87/evo-ai-frontend-community`
