@@ -68,25 +68,159 @@ Clique em **Save** (ou **Generate with AI** para revisar antes).
 
 Após criar o agente, acesse **Configuration** → aba **Tools** → seção **Custom Tools** → clique em **Add Tool**.
 
-Para cada tool listada no prompt do agente, crie uma entrada apontando para o endpoint HubSoft:
+> **Token HubSoft:** é fixo (gerado manualmente). Substitua `SEU_TOKEN_HUBSOFT` pelo token real em todas as tools.
+> Base URL: `https://api.log.hubsoft.com.br`
 
-**Exemplo — `get_cliente_by_cpf_cnpj`:**
+---
 
-| Campo | Valor |
-|---|---|
-| Nome | `get_cliente_by_cpf_cnpj` |
-| Método | `GET` |
-| URL | `https://api.log.hubsoft.com.br/api/v1/integracao/cliente` |
-| Header `Authorization` | `Bearer {token}` |
-| Parâmetro `cpf_cnpj` | query param |
+#### Tools do Agente Suporte Técnico
 
-> Consulte `docs/hubsoft-integration/test-results/README.md` para a lista completa de endpoints e parâmetros validados.
+**`get_cliente_by_cpf`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "cpf_cnpj": "{cpf_cnpj}" }
+```
 
-**Custom Tools HTTP por agente:**
+---
+
+**`get_faturas_pendentes`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/financeiro/fatura`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "id_cliente_servico": "{id_cliente_servico}", "apenas_pendente": "sim" }
+```
+
+---
+
+**`get_ultima_conexao`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "id_cliente_servico": "{id_cliente_servico}", "ultima_conexao": "sim" }
+```
+
+---
+
+**`get_extrato_conexao`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/suporte/extrato_conexao`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "id_cliente_servico": "{id_cliente_servico}" }
+```
+
+---
+
+**`get_tipo_atendimento_by_nome`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/configuracao/tipo_atendimento`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "nome": "{nome_setor}" }
+```
+
+---
+
+**`abrir_os_suporte`**
+- Método: `POST` | Endpoint: `/api/v1/integracao/suporte/atendimento`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT", "Content-Type": "application/json" }
+```
+- Valores Padrão:
+```json
+{ "abrir_os": true }
+```
+> O agente envia `id_cliente_servico`, `id_tipo_atendimento` e `descricao` em runtime.
+
+---
+
+**`transferir_para_humano`**
+- Método: `POST` | Endpoint: webhook de fila humana do Evo CRM
+- > Configure em **Automações** do Evo CRM e cole a URL do webhook aqui.
+
+---
+
+#### Tools do Agente Financeiro
+
+**`get_cliente_by_cpf_cnpj`** — igual a `get_cliente_by_cpf` acima.
+
+**`get_cliente_by_codigo`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "codigo_cliente": "{codigo_cliente}" }
+```
+
+**`desbloquear_por_confianca`** (`request_desbloqueio_confianca`)
+- Método: `POST` | Endpoint: `/api/v1/integracao/cliente/desbloqueio_confianca`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT", "Content-Type": "application/json" }
+```
+> Agente envia `id_cliente_servico` e `dias` em runtime.
+
+---
+
+#### Tools do Agente Retenção
+
+**`get_cliente_by_id_servico`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT" }
+```
+- Parâmetros de Query:
+```json
+{ "id_cliente_servico": "{id_cliente_servico}" }
+```
+
+**`registrar_renegociacao`**
+- Método: `POST` | Endpoint: `/api/v1/integracao/financeiro/renegociacao`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT", "Content-Type": "application/json" }
+```
+> Agente envia `tipo_dados_cliente` (`"codigo_cliente"` ou `"id_cliente"`), `dado_cliente` e `motivo`.
+
+**`abrir_os_cancelamento`**
+- Método: `POST` | Endpoint: `/api/v1/integracao/suporte/atendimento`
+- Headers HTTP:
+```json
+{ "Authorization": "Bearer SEU_TOKEN_HUBSOFT", "Content-Type": "application/json" }
+```
+> Agente envia `id_cliente_servico`, `id_tipo_atendimento` e `motivo_detalhado`.
+
+---
+
+**Resumo por agente:**
 
 | Agente | Custom Tools HTTP |
 |---|---|
-| Suporte Técnico | `get_cliente_by_id_servico`, `get_ultima_conexao`, `get_extrato_conexao`, `get_tipo_atendimento_by_nome`, `abrir_os_suporte`, `transferir_para_humano` |
+| Suporte Técnico | `get_cliente_by_cpf`, `get_faturas_pendentes`, `get_ultima_conexao`, `get_extrato_conexao`, `get_tipo_atendimento_by_nome`, `abrir_os_suporte`, `transferir_para_humano` |
 | Financeiro | `get_cliente_by_cpf_cnpj`, `get_cliente_by_codigo`, `get_faturas_pendentes`, `desbloquear_por_confianca`, `transferir_para_humano` |
 | Vendas Fibra | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
 | Vendas Móvel | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
