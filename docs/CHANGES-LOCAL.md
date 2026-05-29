@@ -24,11 +24,12 @@ Formato de entrada:
   - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
   - Branch: `develop`
 
-### Docker publish planejado
+### Docker publish
 
 - **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools`
 - **Plataformas**: linux/amd64 + linux/arm64
-- **Motivo**: publicar hotfix de binding de parâmetros para Custom Tools HTTP.
+- **Digest**: `sha256:af8b08d68ae35a6424943fe5310813f6b1f5b0acfb478f514f562c20e3413f74`
+- **Motivo**: hotfix de binding de parâmetros para Custom Tools HTTP.
 - **Stack atualizado**: `docs/local/stack-swarm-vps.yaml` já usa `lc1868/evo-ai-processor-community:latest`; o script também publicará `latest`.
 
 ---
