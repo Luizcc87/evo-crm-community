@@ -55,11 +55,12 @@ Formato de entrada:
   - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
   - Branch: `develop`
 
-### Docker publish planejado
+### Docker publish
 
 - **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools3`
 - **Plataformas**: linux/amd64 + linux/arm64
-- **Motivo**: publicar suporte ao formato cru de custom tools salvo pela UI.
+- **Digest**: `sha256:e1a128a22c3bf61a2bda4bbe8ccedc1f65a21308a4102a9cb65ed6e322324d96`
+- **Motivo**: suporte ao formato cru de custom tools salvo pela UI.
 
 ---
 
