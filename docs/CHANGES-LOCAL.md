@@ -85,11 +85,12 @@ Formato de entrada:
   - Conflito no sync: baixo — import pontual.
   - Branch: `develop`
 
-### Docker publish planejado
+### Docker publish
 
 - **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools5`
 - **Plataformas**: linux/amd64 + linux/arm64
-- **Motivo**: publicar correção do import ORM para o refresh de custom tools.
+- **Digest**: `sha256:772158b8b5e88b87708016a138cd04c726ad052a48fb9ddb094877c602c7df42`
+- **Motivo**: correção do import ORM para o refresh de custom tools.
 
 ---
 
