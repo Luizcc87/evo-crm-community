@@ -70,11 +70,12 @@ Formato de entrada:
   - Conflito no sync: médio — fluxo de montagem de tools do processor.
   - Branch: `develop`
 
-### Docker publish planejado
+### Docker publish
 
 - **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools4`
 - **Plataformas**: linux/amd64 + linux/arm64
-- **Motivo**: publicar refresh de custom tools a partir do banco para evitar token/header stale.
+- **Digest**: `sha256:b74bf9d2071715ab988584bc0db53d4ecba7e5138798910cfb538e3a5db9d944`
+- **Motivo**: refresh de custom tools a partir do banco para evitar token/header stale.
 
 ---
 
