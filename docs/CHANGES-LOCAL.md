@@ -77,6 +77,20 @@ Formato de entrada:
 - **Digest**: `sha256:b74bf9d2071715ab988584bc0db53d4ecba7e5138798910cfb538e3a5db9d944`
 - **Motivo**: refresh de custom tools a partir do banco para evitar token/header stale.
 
+### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
+
+- **Arquivo**: `src/services/adk/tool_builder.py` `[PATCH]`
+  - Motivo: refresh de custom tool usava o schema Pydantic `src.schemas.schemas.CustomTool` em `db.query`, gerando 500 (`Column expression... expected`).
+  - Fix: usar o modelo ORM SQLAlchemy `src.models.models.CustomTool`.
+  - Conflito no sync: baixo — import pontual.
+  - Branch: `develop`
+
+### Docker publish planejado
+
+- **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools5`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Motivo**: publicar correção do import ORM para o refresh de custom tools.
+
 ---
 
 ## [2026-05-27] White-label visível sem logo customizado
