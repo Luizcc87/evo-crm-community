@@ -47,6 +47,20 @@ Formato de entrada:
 - **Digest**: `sha256:6332d5af4aba4de42094f0037317798d63d3f5089ae48eba62842bdc61989160`
 - **Motivo**: reforço do hotfix para o schema de Function Calling das Custom Tools HTTP.
 
+### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
+
+- **Arquivos**: `src/services/adk/tool_builder.py`, `src/services/adk/custom_tools.py`, `tests/unit/test_http_custom_tool_builder.py` `[PATCH]`
+  - Motivo: a UI pode salvar/vincular custom tools no formato cru (`query_params`, `path_params`, `body_params` no topo), enquanto o processor lia apenas `parameters.query_params`. Nesse caso o schema ficava sem `cpf_cnpj` e a chamada saía como `Args: {}`.
+  - Fix: normalizar ambos os formatos antes de criar a `FunctionTool` e cobrir o caso com teste unitário.
+  - Conflito no sync: médio — arquivos centrais de montagem/execução de custom tools no processor.
+  - Branch: `develop`
+
+### Docker publish planejado
+
+- **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools3`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Motivo**: publicar suporte ao formato cru de custom tools salvo pela UI.
+
 ---
 
 ## [2026-05-27] White-label visível sem logo customizado
