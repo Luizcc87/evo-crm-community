@@ -62,6 +62,20 @@ Formato de entrada:
 - **Digest**: `sha256:e1a128a22c3bf61a2bda4bbe8ccedc1f65a21308a4102a9cb65ed6e322324d96`
 - **Motivo**: suporte ao formato cru de custom tools salvo pela UI.
 
+### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
+
+- **Arquivos**: `src/services/adk/tool_builder.py`, `src/services/agent_service.py`, `tests/unit/test_http_custom_tool_builder.py` `[PATCH]`
+  - Motivo: após `Args` correto, o 401 indica que o agente pode estar executando uma cópia embutida/stale da custom tool, com header antigo, mesmo após editar a tool global.
+  - Fix: quando `http_tools` embutido tiver `id`, o processor busca a versão atual da custom tool no banco antes de criar a `FunctionTool`. Quando o agente tiver `custom_tool_ids`, o `get_agent` sempre atualiza `custom_tools.http_tools` a partir do banco.
+  - Conflito no sync: médio — fluxo de montagem de tools do processor.
+  - Branch: `develop`
+
+### Docker publish planejado
+
+- **Imagem**: `lc1868/evo-ai-processor-community:v1.0.0-rc4-custom-tools4`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Motivo**: publicar refresh de custom tools a partir do banco para evitar token/header stale.
+
 ---
 
 ## [2026-05-27] White-label visível sem logo customizado
