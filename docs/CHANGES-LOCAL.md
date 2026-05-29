@@ -14,6 +14,26 @@ Formato de entrada:
 
 ---
 
+## [2026-05-29] Core — Teste de Custom Tools HTTP com parâmetros
+
+### Submodule `evo-ai-core-service-community` → fork `Luizcc87/evo-ai-core-service-community`
+
+- **Arquivo**: `pkg/custom_tool/service/custom_tool_service.go` `[PATCH]`
+  - Motivo: botão `Testar` da Custom Tool chamava apenas endpoint + headers, ignorando `path_params`, `query_params`, `body_params` e `values`. Em ferramentas HubSoft com placeholder como `{cpf_cnpj}`, o teste não reproduzia a chamada real do agente.
+  - Fix: montar URL de teste aplicando path/query params e substituindo placeholders por valores definidos em `Valores Padrão`; body params são enviados para POST/PUT/DELETE.
+  - Segurança: headers são normalizados para remover quebras/espaços acidentais em tokens colados no formulário.
+  - Observação: placeholders sem valor retornam erro explícito no teste; para CPF/CNPJ real, usar valor temporário em `Valores Padrão` e remover após validar.
+  - Conflito no sync: médio — service de Custom Tool no core.
+  - Branch: `custom/custom-tool-test`
+
+### Docker publish
+
+- **Imagem**: `lc1868/evo-ai-core-service-community:v1.0.0-rc4-custom-tool-test`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Digest**: `sha256:3d63ef41e77b000dfab221213a0546d90d45aa02831d9eb55777d34fd3795fa2`
+- **Motivo**: hotfix do botão `Testar` para Custom Tools HTTP com parâmetros.
+- **Também publicado**: `lc1868/evo-ai-core-service-community:latest`
+
 ## [2026-05-29] Correção de Custom Tools HTTP para agentes de IA
 
 ### Submodule `evo-ai-processor-community` → fork `Luizcc87/evo-ai-processor-community`
