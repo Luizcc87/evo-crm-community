@@ -24,6 +24,14 @@ Formato de entrada:
   - Conflito no sync: baixo — arquivos de i18n localizados.
   - Branch: `develop`
 
+### Docker publish
+
+- **Imagem**: `lc1868/evo-ai-frontend-community:v1.0.0-rc4-custom-tools-ui`
+- **Plataformas**: linux/amd64 + linux/arm64
+- **Digest**: `sha256:a60f9a3c1015b8fab339c65039843bf9398fa35e70061c27a5034b9c803ee2cc`
+- **Motivo**: disponibilizar no Docker Hub as traduções que exibem a causa real de falha no teste de Custom Tools.
+- **Também publicado**: `lc1868/evo-ai-frontend-community:latest`
+
 ## [2026-05-29] Core — Teste de Custom Tools HTTP com parâmetros
 
 ### Submodule `evo-ai-core-service-community` → fork `Luizcc87/evo-ai-core-service-community`

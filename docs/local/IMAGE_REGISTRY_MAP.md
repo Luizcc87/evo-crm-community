@@ -12,7 +12,7 @@ Define qual registry usar por serviço. Consultar antes de alterar qualquer `ima
 |:---|:---|:---|:---|:---|
 | **Auth** | `lc1868` | `lc1868/evo-auth-service-community` | `v1.0.0-rc4` | Seeds white-label + dev_admin |
 | **CRM** | `lc1868` | `lc1868/evo-ai-crm-community` | `v1.0.0-rc4-proxyconfig2` | Proxy health controller + routes.rb customizado |
-| **Frontend** | `lc1868` | `lc1868/evo-ai-frontend-community` | `v1.0.0-rc4-proxyconfig4` | White-label branding + ProxyPanel + CSP nginx |
+| **Frontend** | `lc1868` | `lc1868/evo-ai-frontend-community` | `v1.0.0-rc4-custom-tools-ui` | White-label branding + ProxyPanel + CSP nginx + mensagens de erro de Custom Tools |
 | **Processor** (Python) | `lc1868` | `lc1868/evo-ai-processor-community` | `v1.0.0-rc4-custom-tools5` | Customização local para binding de parâmetros em Custom Tools HTTP |
 | **Core** (Go) | `lc1868` | `lc1868/evo-ai-core-service-community` | `v1.0.0-rc4-custom-tool-test` | Customização local no teste de Custom Tools HTTP |
 | **Bot Runtime** | `lc1868` | `lc1868/evo-bot-runtime` | `v1.0.0-rc4` | Sem customização atual — rebuild por precaução |
