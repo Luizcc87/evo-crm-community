@@ -14,6 +14,16 @@ Formato de entrada:
 
 ---
 
+## [2026-05-29] Frontend — Mensagem de erro no teste de Custom Tools
+
+### Submodule `evo-ai-frontend-community` → fork `Luizcc87/evo-ai-frontend-community`
+
+- **Arquivos**: `src/i18n/locales/pt-BR/customTools.json`, `src/i18n/locales/pt/customTools.json` `[PATCH]`
+  - Motivo: ao clicar em `Testar` em uma Custom Tool com `test_result.success=false`, a UI exibia a chave crua `test.failed` em vez da causa retornada pelo backend.
+  - Fix: adicionadas chaves de tradução para sucesso, erro, permissões, teste e confirmação de exclusão usadas pela página de Custom Tools.
+  - Conflito no sync: baixo — arquivos de i18n localizados.
+  - Branch: `develop`
+
 ## [2026-05-29] Core — Teste de Custom Tools HTTP com parâmetros
 
 ### Submodule `evo-ai-core-service-community` → fork `Luizcc87/evo-ai-core-service-community`

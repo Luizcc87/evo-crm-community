@@ -418,6 +418,7 @@ sequenceDiagram
 7. Tratar `cliente/all` como rotina batch, nunca chamada de bot em tempo real.
 8. Antes de usar GraphQL em producao, salvar snapshot do schema introspectado do tenant e gerar testes de contrato.
 9. Para suporte avancado, planejar integracao adicional com NMS/OLT/Radius se o provedor precisar teste optico real.
+10. Melhoria futura apos os testes de Custom Tools: suportar tokens/segredos nao explicitos nos headers HTTP, por exemplo `Authorization: Bearer ${{ env.HUBSOFT_API_TOKEN }}`, resolvidos apenas no backend (`evo_core` para o botao Testar e `evo_processor` para execucao do agente). Requisitos minimos: allowlist de prefixos (`HUBSOFT_`/`EVO_SECRET_`), mascaramento em respostas/logs, erro claro quando a variavel estiver ausente e documentacao de deploy para Swarm/Portainer. Hoje, a Custom Tool salva headers como JSON; nao ha suporte local confirmado para interpolacao segura de variaveis.
 
 ## 11. Checklist de validacao no tenant real
 
@@ -431,4 +432,4 @@ sequenceDiagram
 - [ ] Testar planos por CEP e criacao de prospecto em ambiente seguro.
 - [ ] Sincronizar schema GraphQL no Postman e registrar queries/mutations disponiveis.
 - [ ] Confirmar se ha endpoint privado/contratado para OLT/ONU, potencia optica ou teste de linha.
-
+- [ ] Apos validar os fluxos de agente, avaliar implementacao de secret variables para Custom Tools e remover tokens explicitos dos headers cadastrados.
