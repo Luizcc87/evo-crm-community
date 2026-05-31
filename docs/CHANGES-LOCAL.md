@@ -14,6 +14,64 @@ Formato de entrada:
 
 ---
 
+## [2026-05-31] Evolution Go — Migração completa para NativeFlowMessage
+
+### Submodule `evolution-go` → fork `Luizcc87/evolution-go` (branch `main`)
+
+#### `/send/button` — CarouselMessage(1 card) → NativeFlowMessage `[PATCH]`
+
+- **Arquivo**: `pkg/sendMessage/service/send_service.go` — função `SendButton`, bloco `else`
+- **Motivo**: botões `reply/url/call/copy` eram enviados como `CarouselMessage` de 1 card. WhatsApp Web exibe "Aguardando mensagem" e app mobile "Versão não compatível" com esse formato nos clientes atuais.
+- **Fix**: bloco `else` passa a construir `InteractiveMessage` puro com `NativeFlowMessage` no root, igual ao path de `pix`/`review_and_pay`. Header (título + mídia opcional) fica no `InteractiveMessage` raiz. `messageParamsJSON` adicionado (estava ausente nesse path).
+- **Conflito no sync**: médio — toca montagem de mensagem interativa.
+- **Reaplicação**: função `SendButton`, substituir `InteractiveMessage_CarouselMessage_` por `InteractiveMessage_NativeFlowMessage_` no bloco `else`. Ver diff em `docs/wiki/custom/interactive-messages-fix.md`.
+
+#### `/send/list` — ListMessage legado → NativeFlowMessage `single_select` `[PATCH]`
+
+- **Arquivo**: `pkg/sendMessage/service/send_service.go` — função `SendList`
+- **Motivo**: `ListMessage` descontinuado nos clientes modernos. Web exibia "Não foi possível carregar a mensagem". App mobile exibia "Sua versão do WhatsApp não é compatível" mesmo na versão mais recente.
+- **Fix**: reescreve `SendList` usando `InteractiveMessage + NativeFlowMessage` com botão `single_select`. Seções serializadas como JSON no `ButtonParamsJSON`.
+- **Conflito no sync**: alto — função reescrita completamente.
+- **Reaplicação**: substituir toda a função `SendList`. Ver implementação completa em `docs/wiki/custom/interactive-messages-fix.md`.
+
+#### `/send/pix` — rota dedicada `[PATCH]`
+
+- **Arquivos**: `pkg/routes/routes.go`, `pkg/sendMessage/handler/send_handler.go`
+- **Motivo**: PIX existia apenas como tipo de botão em `/send/button`. Contrato da Impa365 e expectativa do mercado é endpoint dedicado.
+- **Fix**: rota `POST /send/pix` registrada; handler `SendPix` criado com validação dos campos obrigatórios (`number`, `headerTitle`, `bodyText`, `merchantName`, `pixKey`, `keyType`).
+- **Conflito no sync**: baixo — adição de rota/handler sem tocar código existente.
+- **Reaplicação**: adicionar 1 linha em `routes.go` e função `SendPix` em `send_handler.go`.
+
+#### Validação `review_and_pay` `[PATCH]`
+
+- **Arquivo**: `pkg/sendMessage/handler/send_handler.go` — função `SendButton`
+- **Fix**: `description` e `footer` não são mais obrigatórios quando o tipo é `review_and_pay`.
+- **Conflito no sync**: baixo — ajuste de validação.
+
+### Docker publicado
+
+- **Imagem**: `lc1868/evolution-go:latest`
+- **Plataformas**: `linux/amd64`, `linux/arm64`
+- **Referência de rebuild**:
+  ```bash
+  docker buildx build --platform linux/amd64 -t lc1868/evolution-go:amd64 --push .
+  docker buildx build --platform linux/arm64 -t lc1868/evolution-go:arm64 --push .
+  docker buildx imagetools create -t lc1868/evolution-go:latest lc1868/evolution-go:amd64 lc1868/evolution-go:arm64
+  ```
+
+---
+
+## [2026-05-30] Evolution Go — Correção do payload Native Flow para botões
+
+### Submodule `evolution-go` → fork `Luizcc87/evolution-go`
+
+- **Arquivos**: `pkg/sendMessage/service/send_service.go`, `go.mod`, `go.sum` `[PATCH]`
+  - Motivo: `/send/button` continuava retornando erro 479 do WhatsApp ao enviar botões Native Flow.
+  - Fix: `buttonParamsJson` passa a ser serializado com `json.Marshal`, evitando JSON inválido quando textos/ids têm caracteres especiais; `messageParamsJson` usa `templateId` string; dependência `go.mau.fi/whatsmeow` alinhada ao build funcional `impa365/evolution-go:latest`, removendo o `replace` local para `./whatsmeow-lib`.
+  - Ajuste adicional: como `InteractiveMessage` simples chegou no WhatsApp Web como "Aguardando mensagem" e não renderizou no celular, `/send/button` não-PIX passou a enviar o mesmo formato de carrossel de 1 card usado pelo `/send/carousel`, que já foi validado no Web e no app. *(substituído pela entrada de 2026-05-31)*
+  - Conflito no sync: médio — toca montagem de mensagem e dependência WhatsApp.
+  - Branch: `release/lc1868-proxy-health`
+
 ## [2026-05-29] Frontend — Mensagem de erro no teste de Custom Tools
 
 ### Submodule `evo-ai-frontend-community` → fork `Luizcc87/evo-ai-frontend-community`
