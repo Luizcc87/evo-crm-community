@@ -3,6 +3,11 @@
 !.env.example
 !.env.swarm.example
 _evo*
+!_evo/
+!_evo/_memory/
+!_evo/_memory/agent.md
+!_evo/_memory/tools.md
+!_evo/_memory/memory.md
 
 .claude/*
 .agents/*
