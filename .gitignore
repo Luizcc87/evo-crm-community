@@ -9,6 +9,8 @@ _evo*
 !_evo/_memory/tools.md
 !_evo/_memory/memory.md
 
+.claude
+.claude/
 .claude/*
 .agents/*
 CLAUDE.md
@@ -16,5 +18,10 @@ CLAUDE.md
 docker-compose.local.yaml
 branding/
 
-# Local-only working copies of sibling enterprise repos (not a submodule).
+# Sibling repos cloned locally but not registered in .gitmodules. They were
+# accidentally tracked as orphan gitlinks before; ignore the dirs so nobody
+# re-adds them with `git add`.
+evolution-hub
+evo-ai-docs/
+evo-flow/
 evo-crm-enterprise/
