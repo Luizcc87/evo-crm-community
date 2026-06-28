@@ -113,6 +113,14 @@ Esta branch contém trabalho em andamento relacionado a:
 | Padrão de documentação | CommonMark estrito |
 | Decisões arquiteturais | Registrar via ADR |
 
+## Configuração do Git & WSL
+
+- **Helper de Credenciais no WSL:** Para permitir que operações do Git dentro do WSL (como `git push` ou `git fetch` em submodules) consumam as credenciais autenticadas do Windows Host automaticamente, use:
+  ```bash
+  git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
+  ```
+- **Prevenção de Travamentos (Hanging):** Ao rodar scripts automatizados de Git que executam push/pull/fetch, desative prompts de terminal com `env GIT_TERMINAL_PROMPT=0` para que falhem imediatamente caso falte autenticação, impedindo que o script trave indefinidamente.
+
 ## Próximos Passos Conhecidos
 
 - **Reconfiguração do Evo CRM** para integração com HubSoft API — o sistema precisa ser reconfigurado para consumir as tools documentadas na branch atual.
