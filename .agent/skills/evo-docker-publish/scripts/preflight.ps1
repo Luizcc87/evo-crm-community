@@ -21,13 +21,13 @@ function Check($label, $ok, $detail = "") {
     if ($ok) {
         Write-Host "  [OK] $label" -ForegroundColor Green
     } else {
-        Write-Host "  [FAIL] $label$(if ($detail) { " — $detail" })" -ForegroundColor Red
+        Write-Host "  [FAIL] $label$(if ($detail) { " - $detail" })" -ForegroundColor Red
         $script:pass = $false
     }
 }
 
 Write-Host ""
-Write-Host "=== Evo Docker Publish — Pre-flight ===" -ForegroundColor Cyan
+Write-Host "=== Evo Docker Publish - Pre-flight ===" -ForegroundColor Cyan
 Write-Host ""
 
 # 1. Docker daemon running
@@ -76,7 +76,7 @@ foreach ($sm in $submodules) {
     if ($populated) {
         $modified = & git -C $smPath status --short 2>$null | Where-Object { $_ -match '^\s?[MAD]' -and $_ -notmatch '^\?\?' }
         $cleanOk = ($modified.Count -eq 0)
-        Check "  $($sm.name) working tree clean" $cleanOk "$($modified.Count) file(s) modified — commit first with evo-commit-submodules"
+        Check "  $($sm.name) working tree clean" $cleanOk "$($modified.Count) file(s) modified - commit first with evo-commit-submodules"
     }
 }
 

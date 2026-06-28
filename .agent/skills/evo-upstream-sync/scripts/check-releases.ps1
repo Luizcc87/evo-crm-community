@@ -47,7 +47,7 @@ foreach ($sm in $submodules) {
             Submodule      = $sm.path
             Pinned         = $sm.pinned
             Latest         = "NOT FOUND"
-            NewRelease     = "⚠️"
+            NewRelease     = "WARN"
             LocalAhead     = "-"
             RemoteStatus   = "missing dir"
         }
@@ -71,7 +71,7 @@ foreach ($sm in $submodules) {
             }
         } else {
             $remoteStatus = "no-url"
-            Write-Warning "$($sm.path): upstream remote missing and no URL configured — skipping fetch"
+            Write-Warning "$($sm.path): upstream remote missing and no URL configured - skipping fetch"
         }
     }
 
@@ -111,7 +111,7 @@ foreach ($sm in $submodules) {
         Submodule      = $sm.path
         Pinned         = $sm.pinned
         Latest         = $latestTag
-        NewRelease     = if ($isNew) { "🆕 YES" } else { "✅ no" }
+        NewRelease     = if ($isNew) { "NEW YES" } else { "OK no" }
         UpstreamMissing = $upstreamMissing
         LocalAhead     = $localAhead
         RemoteStatus   = $remoteStatus
@@ -124,11 +124,11 @@ $newReleases = $results | Where-Object { $_.NewRelease -like "*YES*" }
 if ($newReleases) {
     Write-Host "ACTION REQUIRED: $($newReleases.Count) submodule(s) have new upstream releases." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "For each submodule with 🆕 YES, determine strategy:" -ForegroundColor Cyan
-    Write-Host "  - LocalAhead=0 AND no known customizations → RESET (git branch -f main <tag> && git checkout main)"
-    Write-Host "  - LocalAhead>0 with clean custom commits   → REBASE (git checkout -b sync/<tag> && git rebase <tag>)"
-    Write-Host "  - LocalAhead>0 with mixed history          → CHERRY-PICK custom commits onto new tag"
-    Write-Host "  - High-risk files overlap                  → MANUAL-MERGE"
+    Write-Host "For each submodule with NEW YES, determine strategy:" -ForegroundColor Cyan
+    Write-Host "  - LocalAhead=0 AND no known customizations -> RESET (git branch -f main <tag> && git checkout main)"
+    Write-Host "  - LocalAhead>0 with clean custom commits   -> REBASE (git checkout -b sync/<tag> && git rebase <tag>)"
+    Write-Host "  - LocalAhead>0 with mixed history          -> CHERRY-PICK custom commits onto new tag"
+    Write-Host "  - High-risk files overlap                  -> MANUAL-MERGE"
     Write-Host ""
     Write-Host "Run evo-upstream-sync skill for full analysis and merge planning."
 } else {

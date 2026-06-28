@@ -77,28 +77,31 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 
 **`get_cliente_by_cpf`**
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
-- Headers HTTP (tudo em uma linha, sem quebra):
-```json
-{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
-```
-- Parâmetros de Query:
-```json
-{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}"}
-```
-> A API HubSoft usa dois parâmetros: `busca` = tipo fixo, `termo_busca` = valor dinâmico.
-
----
-
-**`get_faturas_pendentes`**
-- Método: `GET` | Endpoint: `/api/v1/integracao/financeiro/fatura`
 - Headers HTTP:
 ```json
 {"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
-- Parâmetros de Query:
+- Argumento exposto ao agente: `cpf_cnpj` (string, apenas dígitos)
+- Parâmetros de Query (configurar na tool, não expor ao agente):
 ```json
-{"id_cliente_servico":"{id_cliente_servico}","apenas_pendente":"sim"}
+{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}","cancelado":"nao","ultima_conexao":"sim"}
 ```
+> `busca`, `cancelado` e `ultima_conexao` são fixos na config. O agente passa apenas `cpf_cnpj`.
+
+---
+
+**`get_faturas_pendentes`**
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente/financeiro`
+- Headers HTTP:
+```json
+{"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
+```
+- Argumento exposto ao agente: `id_cliente_servico` (integer)
+- Parâmetros de Query (configurar na tool, não expor ao agente):
+```json
+{"busca":"id_cliente_servico","termo_busca":"{id_cliente_servico}","apenas_pendente":"sim"}
+```
+> ⚠️ `busca` e `apenas_pendente` devem ser **hardcoded** na configuração da tool. Sem `busca`, o endpoint retorna faturas de todos os clientes (vazamento LGPD). O agente passa apenas `id_cliente_servico`, que a tool mapeia para `termo_busca`.
 
 ---
 
@@ -108,15 +111,17 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 ```json
 {"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
-- Parâmetros de Query:
+- Argumento exposto ao agente: `id_cliente_servico` (integer)
+- Parâmetros de Query (configurar na tool, não expor ao agente):
 ```json
-{"id_cliente_servico":"{id_cliente_servico}","ultima_conexao":"sim"}
+{"busca":"id_cliente_servico","termo_busca":"{id_cliente_servico}","ultima_conexao":"sim"}
 ```
+> `busca` e `ultima_conexao` são fixos na config. O agente passa apenas `id_cliente_servico`, que a tool mapeia para `termo_busca`. Sem `busca`, a API retorna `"Favor preencher o atributo (busca)"`.
 
 ---
 
 **`get_extrato_conexao`**
-- Método: `GET` | Endpoint: `/api/v1/integracao/suporte/extrato_conexao`
+- Método: `GET` | Endpoint: `/api/v1/integracao/cliente/extrato_conexao`
 - Headers HTTP:
 ```json
 {"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
@@ -163,26 +168,28 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 
 #### Tools do Agente Financeiro
 
-**`get_cliente_by_cpf_cnpj`** — mesma config de `get_cliente_by_cpf` acima (Query: `{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}"}`).
-
-**`get_cliente_by_codigo`**
+**`get_cliente_by_dados`**
 - Método: `GET` | Endpoint: `/api/v1/integracao/cliente`
 - Headers HTTP:
 ```json
 {"Authorization":"Bearer SEU_TOKEN_HUBSOFT","Content-Type":"application/json"}
 ```
-- Parâmetros de Query:
+- Argumento exposto ao agente: `cpf_cnpj` (string, apenas dígitos)
+- Parâmetros de Query (configurar na tool, não expor ao agente):
 ```json
-{"busca":"codigo_cliente","termo_busca":"{codigo_cliente}"}
+{"busca":"cpf_cnpj","termo_busca":"{cpf_cnpj}"}
 ```
+> O agente passa apenas `cpf_cnpj`. A tool injeta `busca=cpf_cnpj` automaticamente. O segundo fator de identidade (data de nascimento, nome ou telefone) é validado pelo **agente** comparando o dado do cliente com `data_nascimento`, `nome_razaosocial` ou `telefone_primario` do retorno — a tool não valida 2 fatores automaticamente.
 
-**`desbloquear_por_confianca`** (`request_desbloqueio_confianca`)
+**`get_faturas_pendentes`** — mesma config da tool do Agente Suporte (endpoint `/api/v1/integracao/cliente/financeiro`, params: `busca=id_cliente_servico`, `termo_busca={id_cliente_servico}`, `apenas_pendente=sim`).
+
+**`request_desbloqueio_confianca`**
 - Método: `POST` | Endpoint: `/api/v1/integracao/cliente/desbloqueio_confianca`
 - Headers HTTP:
 ```json
 { "Authorization": "Bearer SEU_TOKEN_HUBSOFT", "Content-Type": "application/json" }
 ```
-> Agente envia `id_cliente_servico` e `dias` em runtime.
+> Agente envia `id_cliente_servico` e `dias` em runtime. Chamar apenas se cliente for elegível no painel HubSoft.
 
 ---
 
@@ -222,7 +229,7 @@ Após criar o agente, acesse **Configuration** → aba **Tools** → seção **C
 | Agente | Custom Tools HTTP |
 |---|---|
 | Suporte Técnico | `get_cliente_by_cpf`, `get_faturas_pendentes`, `get_ultima_conexao`, `get_extrato_conexao`, `get_tipo_atendimento_by_nome`, `abrir_os_suporte`, `transferir_para_humano` |
-| Financeiro | `get_cliente_by_cpf_cnpj`, `get_cliente_by_codigo`, `get_faturas_pendentes`, `desbloquear_por_confianca`, `transferir_para_humano` |
+| Financeiro | `get_cliente_by_dados`, `get_faturas_pendentes`, `request_desbloqueio_confianca`, `transferir_para_humano` |
 | Vendas Fibra | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
 | Vendas Móvel | `transferir_para_humano` (planos via Native Tool — ver 1.8) |
 | Retenção | `get_cliente_by_id_servico`, `registrar_renegociacao`, `get_tipo_atendimento_by_nome`, `abrir_os_cancelamento`, `transferir_para_humano` |
