@@ -95,8 +95,13 @@ git diff HEAD..<new-tag> --name-only  # should show only docs/changelog
 | File | Local Change | Conflict Risk | Notes |
 |---|---|---|---|
 | `pkg/instance/*`, `pkg/routes/*`, `pkg/config/*` | Proxy health monitor + API endpoint | **MEDIUM** | Core service files; verify on upstream updates |
+| `pkg/sendMessage/service/send_service.go` | Pix flow + review_and_pay + media header uploads on mixed CTA buttons | **HIGH** | Mapeamento de botões e stanzas XMPP conflitam severamente com mudanças de encapsulamento do upstream (como a introdução de `FutureProofMessage` e injeção de `AdditionalNodes`/`bizNodes`). |
 
-**Strategy on next sync:** REBASE or CHERRY-PICK custom commits onto new tag.
+**Strategy on next sync:** 
+1. Realizar merge manual preservando a assinatura local de `SendPix` e as verificações de `hasPix` / `hasReviewAndPay` em `SendButton`.
+2. Em `SendButton` (bloco `else`), atentar para usar `MessageParamsJSON: messageParamsJSON` diretamente (pois já retorna ponteiro) e `MessageParamsJSON: proto.String(paymentMsgParams)` no path de Pix.
+3. Não declarar `ContextInfo` diretamente no literal da struct `FutureProofMessage` (ele é injetado pelo `SendMessage` em tempo de execução).
+4. Substituir por completo a função `SendList` com o formato do upstream tag (que envelopa a `ListMessage` original dentro de `FutureProofMessage` com nodes `biz` do tipo `list`).
 
 ---
 
