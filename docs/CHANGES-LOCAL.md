@@ -14,6 +14,17 @@ Formato de entrada:
 
 ---
 
+## [2026-07-03] Sync upstream evolution-go 0.7.1 → 0.7.2
+
+- **Arquivos**: `pkg/sendMessage/service/send_service.go`, `go.mod`, `go.sum`, `docker/stack-evocrm.yml`
+- **Motivo da customização local**: Sincronização com a nova tag upstream 0.7.2 do component evolution-go.
+- **Conflito encontrado**: Sim. Conflitos na definição de `SendDataStruct`, no mapeamento do switch de botões do `SendButton`, no encapsulamento de `InteractiveMessage`/`ListMessage` com a `FutureProofMessage` (para suporte iOS), e na injeção de `AdditionalNodes` em `SendMessage`.
+- **Resolução**:
+  - `docker/stack-evocrm.yml`: Mantido local (keep-local) para não reintroduzir credenciais hardcoded.
+  - `go.mod`/`go.sum`: Atualizado para utilizar dependências do upstream 0.7.2 (`whatsmeow` e `x/exp`).
+  - `send_service.go`: Mesclado manualmente. Preservou-se a funcionalidade local de `review_and_pay`, `pix` customizado e uploads de imagem/vídeo no cabeçalho das mensagens CTA interativas, integrando com a nova estrutura de `FutureProofMessage` e injeção de `AdditionalNodes`/`bizNodes` do upstream 0.7.2 para compatibilidade de renderização no WhatsApp Web e Mobile.
+- **Branch no fork**: `main` (fork local `evolution-go`)
+
 ## [2026-05-31] Evolution Go — Migração completa para NativeFlowMessage
 
 ### Submodule `evolution-go` → fork `Luizcc87/evolution-go` (branch `main`)
