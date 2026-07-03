@@ -14,6 +14,15 @@ Formato de entrada:
 
 ---
 
+## [2026-07-03] Docker publish — evolution-go e evo-auth-service-community
+
+- **Imagens**: 
+  - `lc1868/evolution-go:0.7.2`
+  - `lc1868/evo-auth-service-community:v1.0.0-rc6`
+- **Plataformas**: linux/amd64 + linux/arm64 (via Docker Buildx)
+- **Motivo**: Rebuild e push das imagens após merges upstream (0.7.2 e v1.0.0-rc6) com preservação de customizações e correções de compilação.
+- **Stack atualizado**: `docs/local/stack-swarm-vps.yaml` (ponteiros de tag)
+
 ## [2026-07-03] Sync upstream evolution-go 0.7.1 → 0.7.2
 
 - **Arquivos**: `pkg/sendMessage/service/send_service.go`, `go.mod`, `go.sum`, `docker/stack-evocrm.yml`
