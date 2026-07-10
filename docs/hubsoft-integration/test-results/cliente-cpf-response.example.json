@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/cliente",
+    "params": "busca=cpf_cnpj&termo_busca=<cpf>&limit=1&cancelado=nao&ultima_conexao=sim",
+    "test_file": "test_clientes.py::test_busca_por_cpf_cnpj",
+    "executado_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "CPF/CNPJ mascarado — substitua pelo CPF real do tenant em TEST_CPF_CNPJ.",
+      "id_cliente_servico é a chave principal para chamadas financeiro, extrato, atendimento.",
+      "ultima_conexao retorna tipo, conectado, datetime, IP e NAS quando ultima_conexao=sim.",
+      "alerta e alerta_mensagens úteis para comunicados de massiva no bot."
+    ]
+  },
+  "status": "success",
+  "msg": "Dados consultados com sucesso",
+  "clientes": [
+    {
+      "id_cliente": 1880,
+      "uuid_cliente": "598ef6dd-e9c6-4f4e-9c73-<uuid-omitido>",
+      "codigo_cliente": 1888,
+      "nome_razaosocial": "NOME COMPLETO DO CLIENTE",
+      "nome_fantasia": "NOME COMPLETO DO CLIENTE",
+      "tipo_pessoa": "pf",
+      "cpf_cnpj": "***.***.***-**",
+      "telefone_primario": "55999999999",
+      "telefone_secundario": null,
+      "email_principal": null,
+      "data_cadastro": "2022-08-25 00:00:00",
+      "alerta": false,
+      "alerta_ids": [],
+      "alerta_mensagens": [],
+      "grupos": [],
+      "ativo": true,
+      "id_externo": null,
+      "servicos": [
+        {
+          "id_cliente_servico": 2491,
+          "uuid_cliente_servico": "b05ca51b-<uuid-omitido>",
+          "id_servico": 32,
+          "numero_plano": 0,
+          "nome": "PLANO_NOME",
+          "valor": 120,
+          "status": "Serviço Habilitado",
+          "status_prefixo": "servico_habilitado",
+          "data_habilitacao": "2022-08-25 00:00:00",
+          "tecnologia": "FIBRA ÓPTICA",
+          "velocidade_download": "10240 Mbits",
+          "velocidade_upload": "10240 Mbits",
+          "login": "login_radius_cliente",
+          "mac_addr": "64:5E:10:63:D3:FC",
+          "phy_addr": "64:5E:10:63:D3:FB",
+          "ipv4": null,
+          "ipv6": null,
+          "ultima_conexao": {
+            "tipo": "accounting",
+            "conectado": true,
+            "ultima_conexao_datetime": "2026-05-25 19:14:26-03",
+            "ultima_desconexao_datetime": null,
+            "ultima_conexao": "25/05/2026 19:14:26",
+            "ultima_desconexao": null,
+            "ultimo_ipv4": "100.65.1.57",
+            "ultimo_nas_ip": "45.161.99.253",
+            "status_txt": "CONECTADO HÁ 0 MES(ES), 1 DIA(S), 22 HORA(S) e 44 MINUTO(S) - 100.65.1.57",
+            "status_txt_resumido": "CONECTADO HÁ 0 MES(ES), 1 DIA(S), 22 HORA(S) e 44 MINUTO(S)",
+            "porta": 80
+          },
+          "carne": "Sim",
+          "tipo_cobranca": "postecipada",
+          "tipo_cobranca_formatada": "Carnê (postecipada)"
+        }
+      ]
+    }
+  ]
+}

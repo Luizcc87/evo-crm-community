@@ -7,7 +7,7 @@ version: "3.8"
 services:
   # Gateway - Nginx
   evo_gateway:
-    image: lc1868/evo-crm-gateway:1.0.0
+    image: lc1868/evo-crm-gateway:v1.0.0-rc5
     networks:
       - network_swarm_public
     deploy:
@@ -22,7 +22,7 @@ services:
 
   # Auth Service
   evo_auth:
-    image: lc1868/evo-auth-service-community:1.0.0
+    image: lc1868/evo-auth-service-community:v1.0.0-rc5
     command: bash -c "bundle exec rails db:migrate || echo 'Migration errors'; bundle exec rails s -p 3001 -b 0.0.0.0"
     environment:
       RAILS_ENV: production
@@ -45,7 +45,7 @@ services:
 
   # CRM Service
   evo_crm:
-    image: lc1868/evo-ai-crm-community:1.0.0
+    image: lc1868/evo-ai-crm-community:v1.0.0-rc5
     command: sh -c "bundle exec rails db:migrate || echo 'Migration had errors'; bundle exec rails s -p 3000 -b 0.0.0.0"
     environment:
       RAILS_ENV: production
@@ -70,7 +70,7 @@ services:
 
   # Core Service
   evo_core:
-    image: lc1868/evo-ai-core-service-community:1.0.0
+    image: lc1868/evo-ai-core-service-community:v1.0.0-rc5
     environment:
       DB_HOST: "evo-crm-db_postgres"
       DB_PORT: "5432"
@@ -89,7 +89,7 @@ services:
 
   # Processor Service
   evo_processor:
-    image: lc1868/evo-ai-processor-community:1.0.0
+    image: lc1868/evo-ai-processor-community:v1.0.0-rc5
     environment:
       POSTGRES_CONNECTION_STRING: "postgresql://evo_user:EvoPass_2026_!@#@evo-crm-db_postgres:5432/evo_community?sslmode=disable"
       REDIS_HOST: "evo-crm-redis_cache"
@@ -104,7 +104,7 @@ services:
 
   # Bot Runtime
   evo_bot_runtime:
-    image: lc1868/evo-bot-runtime:1.0.0
+    image: lc1868/evo-bot-runtime:v1.0.0-rc5
     environment:
       LISTEN_ADDR: "0.0.0.0:8080"
       REDIS_URL: "redis://evo-crm-redis_cache:6379/1"
@@ -116,7 +116,7 @@ services:
 
   # Frontend
   evo_frontend:
-    image: lc1868/evo-ai-frontend-community:1.0.0
+    image: lc1868/evo-ai-frontend-community:v1.0.0-rc5
     environment:
       VITE_API_URL: "https://api.voce.com"
       VITE_AUTH_API_URL: "https://api.voce.com"

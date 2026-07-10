@@ -1,0 +1,16 @@
+{
+  "_meta": {
+    "endpoint": "POST /api/v1/integracao/prospecto",
+    "test_file": "test_vendas.py::test_criar_prospecto",
+    "notes": "Execute apenas contra sandbox. id_prospecto é o identificador para consulta posterior. prospecto_servico contém o plano vinculado.",
+    "status": "SKIPPED em ambiente produção — executar manualmente contra sandbox"
+  },
+  "status": "success",
+  "id_prospecto": 771,
+  "prospecto_servico": {
+    "id_prospecto_servico": 881,
+    "id_servico": 1330,
+    "descricao": "500MB FIBRA",
+    "valor": 254.9
+  }
+}

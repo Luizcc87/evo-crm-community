@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/cliente/financeiro",
+    "params": "busca=id_cliente_servico&termo_busca=2491&apenas_pendente=sim&limit=3",
+    "test_file": "test_financeiro.py::test_faturas_por_id_cliente_servico",
+    "executado_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "linha_digitavel, codigo_barras e pix_copia_cola variam por banco do provedor.",
+      "data_pagamento é null em faturas pendentes — use apenas_pendente=sim para filtrar.",
+      "detalhamento[] descreve composição da cobrança (período de referência, descontos).",
+      "link aponta para PDF do boleto no host do tenant — expira conforme configuração do provedor.",
+      "Para gerar QR Code PIX visual: use pix_copia_cola no lado do Evo, sem alterar o conteúdo."
+    ]
+  },
+  "status": "success",
+  "msg": "Dados consultados com sucesso",
+  "faturas": [
+    {
+      "id_fatura": 155491,
+      "quitado": false,
+      "status": "aguardando",
+      "nosso_numero": "25211288",
+      "nosso_numero_dv": "25/211288-2",
+      "linha_digitavel": "74891.12529 11288.203075 20007.811027 6 14830000012000",
+      "codigo_barras": "74896148300000120001125211288203072000781102",
+      "pix_copia_cola": "00020101021226850014BR.GOV.BCB.PIX2563pix.santander.com.br/qr/v2/<hash>5204000053039865802BR5920PROVEDOR LTDA6013Nao informado62070503***6304D566",
+      "link": "https://<host>/pdf/fatura/<hash>",
+      "agencia_codigo_beneficiario": "0307.20.00781",
+      "beneficiario": "PROVEDOR LTDA / CNPJ: XX.XXX.XXX/0001-XX",
+      "numero_documento": 155491,
+      "especie": "DM",
+      "especie_dinheiro": "R$",
+      "aceite": "N",
+      "local_pagamento": "QUALQUER LOTERICA/AGENCIA BANCARIA ATE O VENCIMENTO",
+      "carteira": 1,
+      "tipo_cobranca": "boleto_bancario",
+      "valor": 120,
+      "valor_pago": null,
+      "data_vencimento": "20/06/2026",
+      "data_cadastro": "24/06/2025",
+      "data_pagamento": null,
+      "data_documento": "24/06/2025",
+      "data_processamento": "27/05/2026",
+      "empresa": {
+        "documento": "CNPJ-omitido",
+        "nome_razaosocial": "PROVEDOR LTDA",
+        "nome_fantasia": "PROVEDOR INTERNET"
+      },
+      "detalhamento": [
+        {
+          "id_cobranca": 161776,
+          "descricao": "SCM - PLANO_NOME - 20/05/2026 até 19/06/2026 - R$ 120.00",
+          "valor": 120,
+          "valor_original": 120,
+          "data_vencimento": "2026-06-20",
+          "status": "Aguardando",
+          "valor_desconto": 0,
+          "valor_pago": 0,
+          "data_pagamento": null,
+          "nota_fiscal": {
+            "id_nota": null,
+            "modelo": null
+          },
+          "desconto_cobranca": [],
+          "desconto_promocional_cobranca": [],
+          "composicao": []
+        }
+      ],
+      "cliente": {
+        "codigo_cliente": 1888,
+        "nome_razaosocial": "NOME DO CLIENTE",
+        "cpf_cnpj": "***.***.***-**",
+        "servico": {
+          "id_cliente_servico": 2491,
+          "numero_plano": 0,
+          "nome": "PLANO_NOME",
+          "valor": 120,
+          "status": "Serviço Habilitado",
+          "status_prefixo": "servico_habilitado",
+          "endereco_cadastral": {
+            "completo": "RUA EXEMPLO, 100 - BAIRRO, CIDADE/UF | CEP: 00000-000",
+            "endereco": "RUA EXEMPLO",
+            "numero": "100",
+            "complemento": null,
+            "bairro": "BAIRRO",
+            "cep": "00000000",
+            "estado": "ESTADO",
+            "uf": "UF",
+            "cidade": "CIDADE",
+            "coordenadas": {
+              "latitude": -27.658268,
+              "longitude": -54.438819
+            }
+          }
+        }
+      },
+      "processamento_cartao": []
+    }
+  ]
+}

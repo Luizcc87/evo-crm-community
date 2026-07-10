@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "endpoint": "POST /api/v1/integracao/mapeamento/viabilidade/consultar",
+    "body": {
+      "tipo_busca": "coordenadas | endereco",
+      "raio": 250,
+      "latitude": -20.087,
+      "longitude": -45.290,
+      "detalhar_portas": false
+    },
+    "test_file": "test_viabilidade.py::test_viabilidade_por_coordenadas",
+    "executado_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "origem pode ser: mapeamento_local, mapeamento_externo.",
+      "projetos retorna string descritiva quando nenhum projeto cobre a localização.",
+      "alertas[] lista alertas de capacidade ou cobertura quando detalhar_portas=true.",
+      "Não comprova viabilidade física de porta/CTO — usar como pré-filtro.",
+      "Para tipo_busca=endereco: enviar numero, endereco, bairro, cidade, estado no objeto endereco.",
+      "raio em metros — padrão de 250m é suficiente para localização urbana."
+    ]
+  },
+  "status": "success",
+  "msg": "Viabilidade consultado com sucesso",
+  "resultado": {
+    "origem": "mapeamento_local",
+    "projetos": "Nenhum Projeto foi compatível com a localização.",
+    "alertas": []
+  }
+}

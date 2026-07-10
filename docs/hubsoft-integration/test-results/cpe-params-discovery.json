@@ -1,0 +1,35 @@
+{
+  "_meta": {
+    "endpoint": "GET /api/v1/integracao/rede/cpe/todos",
+    "descoberta_em": "2026-05-27",
+    "tenant": "api.log.hubsoft.com.br",
+    "notas": [
+      "DISCOVERY: endpoint requer pagina e itens_por_pagina obrigatórios — não documentado na collection Postman.",
+      "Sem esses params a API retorna status=error com mensagem de validação.",
+      "Tenant de teste não possui CPEs cadastrados — retorna lista vazia com status=success após correção dos params.",
+      "test_rede_cpe.py foi corrigido em 2026-05-27 para incluir params obrigatórios."
+    ]
+  },
+  "params_obrigatorios": {
+    "pagina": "integer, base 0",
+    "itens_por_pagina": "integer"
+  },
+  "erro_sem_params": {
+    "status": "error",
+    "msg": "Verifique os dados informados e tente novamente!",
+    "errors": [
+      "O campo pagina é obrigatório.",
+      "O campo itens por pagina é obrigatório."
+    ]
+  },
+  "estrutura_esperada_com_params": {
+    "status": "success",
+    "paginacao": {
+      "primeira_pagina": 0,
+      "ultima_pagina": 0,
+      "pagina_atual": 0,
+      "total_registros": 0
+    },
+    "cpes": []
+  }
+}

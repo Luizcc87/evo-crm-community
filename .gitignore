@@ -1,11 +1,34 @@
 .env
+.env.*
+!.env.example
+!.env.swarm.example
 _evo*
+!_evo/
+!_evo/_memory/
+!_evo/_memory/agent.md
+!_evo/_memory/tools.md
+!_evo/_memory/memory.md
 
+.claude
+.claude/
 .claude/*
 .agents/*
 CLAUDE.md
 
 docker-compose.local.yaml
+branding/
 
-# Local-only working copies of sibling enterprise repos (not a submodule).
+# Sibling repos cloned locally but not registered in .gitmodules. They were
+# accidentally tracked as orphan gitlinks before; ignore the dirs so nobody
+# re-adds them with `git add`.
+evolution-hub
+evo-ai-docs/
 evo-crm-enterprise/
+.vscode/
+logs/
+_evo/bmm/
+_evo/core/
+_evo/_config/
+_evo/_memory/tech-writer-sidecar/
+_evo/_memory/config.yaml
+evo-assistant/
