@@ -18,7 +18,7 @@ Define qual registry usar por serviço. Consultar antes de alterar qualquer `ima
 | **Bot Runtime** | `lc1868` | `lc1868/evo-bot-runtime` | `v1.0.0-rc4` | Sem customização atual — rebuild por precaução |
 | **Evolution GO** | `lc1868` | `lc1868/evolution-go` | `v0.7.1-proxy-in-use` | Proxy health monitor + API endpoint |
 | **Gateway** (nginx) | `lc1868` | `lc1868/evo-crm-gateway` | `1.0.0` | Config customizada |
-| **evo-flow-community** | `lc1868` | `lc1868/evo-flow-community` | `v1.0.0-rc7` | Imagem necessária para produção/VPS real |
+| **evo-flow-community** | `lc1868` | `lc1868/evo-flow-community` | `v1.0.0-rc7` | Imagem necessária para produção/VPS real e publish automático |
 | Redis | upstream | `redis:7-alpine` | — | Sem customização |
 | PostgreSQL | upstream | `postgres:15-alpine` | — | Sem customização |
 | ClickHouse | upstream | `clickhouse/clickhouse-server:latest` | — | Sem customização |

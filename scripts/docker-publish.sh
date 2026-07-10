@@ -9,7 +9,7 @@
 #   ./scripts/docker-publish.sh --dry-run          # mostra comandos sem executar
 #
 # Pré-requisitos:
-#   docker login -u lc1868
+#   docker login
 #   docker buildx inspect evo-multiarch --bootstrap  # builder multi-arch ativo
 #
 # Saída:

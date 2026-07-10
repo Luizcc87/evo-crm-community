@@ -32,7 +32,10 @@ git merge upstream/main --no-ff -m "sync(upstream): merge upstream vX.Y.Z"
 # 4. Push main para origin (seu fork)
 git push origin main
 
-# 5. Abrir PR main → develop para revisão de conflitos e testes
+# 5. Publicação das imagens do fork
+./scripts/docker-publish.sh --version <versao>
+
+# 6. Se necessário, abrir PR main → develop para revisão de conflitos e testes
 gh pr create --base develop --head main \
   --title "sync(upstream): merge vX.Y.Z" \
   --body "Sync automático com upstream. Revisar conflitos e rodar smoke tests antes de mergear."
@@ -117,12 +120,13 @@ Abrir `CHANGELOG.md` na raiz e adicionar entrada:
 
 ## Referências rápidas
 
-| Repositório | Upstream oficial | Fork Luiz |
-|---|---|---|
-| orquestrador | `EvolutionAPI/evo-crm-community` | `Luizcc87/evo-crm-community` |
-| evo-auth | `evolution-foundation/evo-auth-service-community` | `Luizcc87/evo-auth-service-community` |
-| evo-crm | `evolution-foundation/evo-ai-crm-community` | `Luizcc87/evo-ai-crm-community` |
-| evo-frontend | `evolution-foundation/evo-ai-frontend-community` | `Luizcc87/evo-ai-frontend-community` |
-| evo-processor | `evolution-foundation/evo-ai-processor-community` | `Luizcc87/evo-ai-processor-community` |
-| evo-core | `evolution-foundation/evo-ai-core-service-community` | `Luizcc87/evo-ai-core-service-community` |
-| evo-bot-runtime | `evolution-foundation/evo-bot-runtime` | `Luizcc87/evo-bot-runtime` |
+| Repositório | Upstream oficial | Fork Luiz | Docker Hub do fork |
+|---|---|---|---|
+| orquestrador | `EvolutionAPI/evo-crm-community` | `Luizcc87/evo-crm-community` | n/a |
+| evo-auth | `evolution-foundation/evo-auth-service-community` | `Luizcc87/evo-auth-service-community` | `lc1868/evo-auth-service-community` |
+| evo-crm | `evolution-foundation/evo-ai-crm-community` | `Luizcc87/evo-ai-crm-community` | `lc1868/evo-ai-crm-community` |
+| evo-frontend | `evolution-foundation/evo-ai-frontend-community` | `Luizcc87/evo-ai-frontend-community` | `lc1868/evo-ai-frontend-community` |
+| evo-processor | `evolution-foundation/evo-ai-processor-community` | `Luizcc87/evo-ai-processor-community` | `lc1868/evo-ai-processor-community` |
+| evo-core | `evolution-foundation/evo-ai-core-service-community` | `Luizcc87/evo-ai-core-service-community` | `lc1868/evo-ai-core-service-community` |
+| evo-bot-runtime | `evolution-foundation/evo-bot-runtime` | `Luizcc87/evo-bot-runtime` | `lc1868/evo-bot-runtime` |
+| evo-flow-community | `evolution-foundation/evo-flow-community` | `Luizcc87/evo-flow-community` | `lc1868/evo-flow-community` |
