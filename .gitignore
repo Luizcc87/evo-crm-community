@@ -23,7 +23,6 @@ branding/
 # re-adds them with `git add`.
 evolution-hub
 evo-ai-docs/
-evo-flow/
 evo-crm-enterprise/
 .vscode/
 logs/
@@ -32,3 +31,4 @@ _evo/core/
 _evo/_config/
 _evo/_memory/tech-writer-sidecar/
 _evo/_memory/config.yaml
+evo-assistant/
