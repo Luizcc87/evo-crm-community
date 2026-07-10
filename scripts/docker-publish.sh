@@ -138,10 +138,11 @@ declare -a IMAGE_LIST=(
   "evo-ai-processor-community|evo-ai-processor-community|Dockerfile|evo-ai-processor-community"
   "evo-ai-core-service-community|evo-ai-core-service-community|Dockerfile|evo-ai-core-service-community"
   "evo-bot-runtime|evo-bot-runtime|Dockerfile|evo-bot-runtime"
+  "evo-flow-community|evo-flow-community|Dockerfile|evo-flow-community"
   "evolution-go|evolution-go|Dockerfile|evolution-go"
   "evo-crm-gateway|nginx|Dockerfile|nginx"
 )
-# evo-flow: build local via docker-compose.evo-flow.yml — não publicado no Docker Hub
+# evo-flow-community: image de produção/VPS; também publicada no Docker Hub
 
 # =============================================================================
 # Header

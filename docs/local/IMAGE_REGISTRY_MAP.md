@@ -18,7 +18,7 @@ Define qual registry usar por serviço. Consultar antes de alterar qualquer `ima
 | **Bot Runtime** | `lc1868` | `lc1868/evo-bot-runtime` | `v1.0.0-rc4` | Sem customização atual — rebuild por precaução |
 | **Evolution GO** | `lc1868` | `lc1868/evolution-go` | `v0.7.1-proxy-in-use` | Proxy health monitor + API endpoint |
 | **Gateway** (nginx) | `lc1868` | `lc1868/evo-crm-gateway` | `1.0.0` | Config customizada |
-| **evo-flow-community** | build local | — | — | Build via `docker-compose.evo-flow.yml` — **nunca publicar no Docker Hub** |
+| **evo-flow-community** | `lc1868` | `lc1868/evo-flow-community` | `v1.0.0-rc7` | Imagem necessária para produção/VPS real |
 | Redis | upstream | `redis:7-alpine` | — | Sem customização |
 | PostgreSQL | upstream | `postgres:15-alpine` | — | Sem customização |
 | ClickHouse | upstream | `clickhouse/clickhouse-server:latest` | — | Sem customização |
@@ -39,7 +39,10 @@ Define qual registry usar por serviço. Consultar antes de alterar qualquer `ima
 # Serviço específico
 ./scripts/docker-publish.sh --image evo-ai-crm-community --version 1.0.0-rc4
 
-# evo-flow-community (build local, não publica)
+# evo-flow-community
+./scripts/docker-publish.sh --image evo-flow-community --version 1.0.0-rc7
+
+# build local para a stack de jornada
 docker compose -f docker-compose.evo-flow.yml build evo-flow
 ```
 
@@ -59,7 +62,7 @@ Log gerado automaticamente em: `logs/docker-publish-<timestamp>.log`
    - Feature nova sem sync: `v1.0.0-rc4-<slug>`
    - Hotfix: `v1.0.0-rc4-hotfix-<data>`
 
-4. **evo-flow nunca vai para Docker Hub** — depende de configs locais (Kafka, ClickHouse, Temporal) e é sempre buildado on-demand via compose.
+4. **evo-flow-community vai para Docker Hub e também pode ser buildado localmente** — a imagem é necessária para produção/VPS real; a stack local usa `docker-compose.evo-flow.yml` quando você quer testar o conjunto completo.
 
 5. **Após push**: atualizar tags em `docs/local/stack-swarm-vps.yaml` e rodar `docker service update` no Swarm.
 
