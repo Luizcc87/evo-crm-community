@@ -1,8 +1,8 @@
 # Evo-Flow Setup & Deployment
 
-Este documento contém as instruções para subir a stack do `evo-flow` (que gerencia as Jornadas Automatizadas e Campanhas) tanto no ambiente de desenvolvimento local quanto em produção utilizando Swarm/Portainer.
+Este documento contém as instruções para subir a stack do `evo-flow-community` (que gerencia as Jornadas Automatizadas e Campanhas) tanto no ambiente de desenvolvimento local quanto em produção utilizando Swarm/Portainer.
 
-O `evo-flow` requer um conjunto próprio de serviços auxiliares que rodam em paralelo ao core do CRM:
+O `evo-flow-community` requer um conjunto próprio de serviços auxiliares que rodam em paralelo ao core do CRM:
 - **Temporal** (Orquestrador de workflows)
 - **ClickHouse** (Banco colunar para analytics/eventos)
 - **Kafka / Zookeeper** (Fila de mensageria para streaming de eventos)
@@ -15,11 +15,11 @@ O ambiente local do orquestrador foi configurado em uma stack docker-compose sep
 
 ### Passo a passo para rodar localmente:
 
-1. Certifique-se de que a rede padrão e os serviços base (PostgreSQL e Redis) estejam rodando, pois o `evo-flow` se conecta a eles:
+1. Certifique-se de que a rede padrão e os serviços base (PostgreSQL e Redis) estejam rodando, pois o `evo-flow-community` se conecta a eles:
    ```bash
    docker-compose up -d postgres redis
    ```
-2. Inicialize a stack do `evo-flow`:
+2. Inicialize a stack do `evo-flow-community`:
    ```bash
    docker-compose -f docker-compose.evo-flow.yml up -d
    ```

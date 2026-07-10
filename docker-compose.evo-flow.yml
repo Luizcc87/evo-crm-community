@@ -20,8 +20,8 @@ services:
       CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
     volumes:
       - clickhouse_data:/var/lib/clickhouse
-      - ./evo-flow/docker/clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./evo-flow/docker/clickhouse/config.xml:/etc/clickhouse-server/config.d/custom.xml
+      - ./evo-flow-community/docker/clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./evo-flow-community/docker/clickhouse/config.xml:/etc/clickhouse-server/config.d/custom.xml
     ulimits:
       nofile:
         soft: 262144
@@ -96,7 +96,7 @@ services:
       - POSTGRES_SEEDS=postgres
       - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/config/dynamicconfig/development-sql.yaml
     volumes:
-      - ./evo-flow/docker/temporal/development-sql.yaml:/etc/temporal/config/dynamicconfig/development-sql.yaml
+      - ./evo-flow-community/docker/temporal/development-sql.yaml:/etc/temporal/config/dynamicconfig/development-sql.yaml
     depends_on:
       - kafka
 
@@ -105,7 +105,7 @@ services:
   # =============================================================================
   evo-flow:
     build:
-      context: ./evo-flow
+      context: ./evo-flow-community
       dockerfile: Dockerfile
     container_name: evo-flow
     networks:

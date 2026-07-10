@@ -17,7 +17,7 @@ evo-crm-community/                    ← Orquestrador (fork de EvolutionAPI/evo
 ├── evolution-api/                     ← [SUBMODULE] WhatsApp Node.js — puro upstream (2.4.0-rc2)
 ├── evolution-go/                      ← [SUBMODULE] WhatsApp Go — 2 commits locais
 ├── evo-nexus/                         ← [SUBMODULE] Multi-agent layer — puro (v0.33.0)
-├── evo-flow/                          ← [SUBMODULE] Flow engine — tracking main
+├── evo-flow-community/                ← [SUBMODULE] Flow engine — tracking main
 │
 ├── _evo/                              ← [OVERLAY] Sistema BMM / agentes IA / workflows (local)
 ├── _evo-output/                       ← [OVERLAY] Artefatos gerados pelos agentes

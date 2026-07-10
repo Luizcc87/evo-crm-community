@@ -33,7 +33,7 @@
 | evolution-api | 2.4.0-rc2 | ✅ puro |
 | evolution-go | 0.7.1 | ⚠️ 2 commits locais |
 | evo-nexus | v0.33.0 | ✅ puro |
-| evo-flow | heads/main | ⚡ tracking main |
+| evo-flow-community | heads/main | ⚡ tracking main |
 
 ---
 
