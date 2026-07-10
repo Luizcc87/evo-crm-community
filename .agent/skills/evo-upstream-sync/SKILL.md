@@ -20,13 +20,13 @@ For each submodule with a known upstream remote, fetch tags and identify new rel
 ```powershell
 # Submodules with upstream remotes (from docs/upstream-sync-analysis.md)
 $submodules = @(
-    @{ path="evo-ai-crm-community";         pinned="v1.0.0-rc4" },
-    @{ path="evo-ai-frontend-community";    pinned="v1.0.0-rc4" },
-    @{ path="evo-auth-service-community";   pinned="v1.0.0-rc4" },
-    @{ path="evo-ai-core-service-community";pinned="v1.0.0-rc4" },
-    @{ path="evo-ai-processor-community";   pinned="v1.0.0-rc4" },
-    @{ path="evo-bot-runtime";              pinned="v1.0.0-rc3" },
-    @{ path="evolution-go";                 pinned="v0.7.1"     },
+    @{ path="evo-ai-crm-community";         pinned="v1.0.0-rc7" },
+    @{ path="evo-ai-frontend-community";    pinned="v1.0.0-rc7" },
+    @{ path="evo-auth-service-community";   pinned="v1.0.0-rc7" },
+    @{ path="evo-ai-core-service-community";pinned="v1.0.0-rc7" },
+    @{ path="evo-ai-processor-community";   pinned="v1.0.0-rc7" },
+    @{ path="evo-bot-runtime";              pinned="v1.0.0-rc7" },
+    @{ path="evolution-go";                 pinned="0.7.2"     },
     @{ path="evolution-api";                pinned="2.4.0-rc2"  },
     @{ path="evo-nexus";                    pinned="v0.33.0"    }
 )

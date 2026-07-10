@@ -21,12 +21,12 @@ $ErrorActionPreference = "Stop"
 $ROOT = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
 
 $submodules = @(
-    @{ path="evo-ai-crm-community";          pinned="v1.0.0-rc5";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-crm-community.git" },
-    @{ path="evo-ai-frontend-community";     pinned="v1.0.0-rc5";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-frontend-community.git" },
-    @{ path="evo-auth-service-community";    pinned="v1.0.0-rc6";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-auth-service-community.git" },
-    @{ path="evo-ai-core-service-community"; pinned="v1.0.0-rc5";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-core-service-community.git" },
-    @{ path="evo-ai-processor-community";    pinned="v1.0.0-rc5";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-processor-community.git" },
-    @{ path="evo-bot-runtime";               pinned="v1.0.0-rc5";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-bot-runtime.git" },
+    @{ path="evo-ai-crm-community";          pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-crm-community.git" },
+    @{ path="evo-ai-frontend-community";     pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-frontend-community.git" },
+    @{ path="evo-auth-service-community";    pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-auth-service-community.git" },
+    @{ path="evo-ai-core-service-community"; pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-core-service-community.git" },
+    @{ path="evo-ai-processor-community";    pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-ai-processor-community.git" },
+    @{ path="evo-bot-runtime";               pinned="v1.0.0-rc7";  upstream="upstream"; upstreamUrl="https://github.com/evolution-foundation/evo-bot-runtime.git" },
     @{ path="evolution-go";                  pinned="0.7.2";       upstream="origin";   upstreamUrl="https://github.com/evolution-foundation/evolution-go.git" },
     @{ path="evolution-api";                 pinned="2.4.0-rc2";   upstream="upstream"; upstreamUrl=$null },
     @{ path="evo-nexus";                     pinned="v0.33.0";     upstream="upstream"; upstreamUrl=$null }
