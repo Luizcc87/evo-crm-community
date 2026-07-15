@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "3011:3001"
     env_file: .env
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
@@ -104,7 +104,7 @@ services:
         RAILS_SERVE_STATIC_FILES: "false"
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3010:3000"
     env_file: .env
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
@@ -185,7 +185,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "5555:5555"
+      - "5565:5555"
     env_file: .env
     environment:
       DB_HOST: postgres
@@ -219,7 +219,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8011:8000"
     env_file: .env
     environment:
       POSTGRES_CONNECTION_STRING: postgresql://${POSTGRES_USERNAME:-postgres}:${POSTGRES_PASSWORD:-evoai_dev_password}@postgres:5432/${POSTGRES_DATABASE:-evo_community}
@@ -254,7 +254,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8092:8080"
     env_file: .env
     environment:
       LISTEN_ADDR: 0.0.0.0:8080
@@ -279,12 +279,12 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
-      VITE_AUTH_API_URL: ${VITE_AUTH_API_URL:-http://localhost:3001}
-      VITE_WS_URL: ${VITE_WS_URL:-http://localhost:3000}
-      VITE_EVOAI_API_URL: ${VITE_EVOAI_API_URL:-http://localhost:5555}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3010}
+      VITE_AUTH_API_URL: ${VITE_AUTH_API_URL:-http://localhost:3011}
+      VITE_WS_URL: ${VITE_WS_URL:-http://localhost:3010}
+      VITE_EVOAI_API_URL: ${VITE_EVOAI_API_URL:-http://localhost:5565}
       VITE_EVOFLOW_API_URL: ${VITE_EVOFLOW_API_URL:-http://localhost:3334}
-      VITE_AGENT_PROCESSOR_URL: ${VITE_AGENT_PROCESSOR_URL:-http://localhost:8000}
+      VITE_AGENT_PROCESSOR_URL: ${VITE_AGENT_PROCESSOR_URL:-http://localhost:8011}
       APP_NAME: ${APP_NAME:-Evo CRM}
       APP_TITLE: ${APP_TITLE:-Evo CRM}
       APP_LOGO_URL: ${APP_LOGO_URL:-}
