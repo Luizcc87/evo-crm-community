@@ -25,6 +25,8 @@ Formato de entrada:
   - `EvolutionGoForm.tsx`: Mesclado manualmente para manter a UI avançada de Proxy e validações.
   - `customTools.json`: Resolvido mantendo as traduções locais de testes de Custom Tools e eliminação/deletar.
 - **Branch nos forks**: `develop` (para `evo-auth-service-community`, `evo-ai-crm-community` e `evo-ai-frontend-community`), `main` (para `evolution-go`).
+- **Correções pós-sync**:
+  - `evo-ai-crm-community`: Desabilitado STI (Single Table Inheritance) no model `User` (`app/models/user.rb`) adicionando `self.inheritance_column = :_type_disabled` para resolver erro `ActiveRecord::SubclassNotFound` para o tipo `Agent`.
 
 ## [2026-07-03] Docker publish — evolution-go e evo-auth-service-community
 
