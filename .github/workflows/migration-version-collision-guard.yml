@@ -12,10 +12,7 @@ name: Migration version collision guard
 # grandfathered/pré-cutoff, ou se um check de paridade por-repo for burlado).
 
 on:
-  pull_request:
-    branches: [main, develop]
-  push:
-    branches: [main, develop]
+  workflow_dispatch:
 
 permissions:
   contents: read

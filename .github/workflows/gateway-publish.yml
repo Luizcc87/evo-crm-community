@@ -1,11 +1,7 @@
 name: "Build & Publish Gateway Image"
 
 on:
-  push:
-    branches: [main, develop]
-    tags: ["v*.*.*"]
-    paths:
-      - "nginx/**"
+  workflow_dispatch:
 
 permissions:
   contents: read
