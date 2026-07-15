@@ -14,6 +14,15 @@ Formato de entrada:
 
 ---
 
+## [2026-07-15] Frontend white-label runtime via index.html
+
+### Submodule `evo-ai-frontend-community` -> fork `Luizcc87/evo-ai-frontend-community`
+
+- **Arquivos**: `index.html`, `src/branding/config.ts`, `src/branding/config.spec.ts` `[PATCH]`
+  - Motivo: `APP_TITLE` era aplicado porque o placeholder fica no HTML, mas `APP_NAME`/logo eram avaliados dentro do bundle React e podiam cair nos defaults antes da substituicao runtime. O `index.html` agora injeta `window.__EVO_BRANDING__` com os mesmos placeholders substituidos pelo entrypoint; o React le esse objeto antes de montar a UI.
+  - Conflito no sync: baixo/medio - `index.html` e `src/branding/*` fazem parte da camada white-label local.
+  - Branch no fork: `develop`
+
 ## [2026-07-15] Sincronização Upstream para v1.0.0 (Latest)
 
 - **Arquivos**: Vários submodules e repositório orquestrador
