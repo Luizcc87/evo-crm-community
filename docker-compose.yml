@@ -289,6 +289,9 @@ services:
       APP_TITLE: ${APP_TITLE:-Evo CRM}
       APP_LOGO_URL: ${APP_LOGO_URL:-}
       APP_FAVICON_URL: ${APP_FAVICON_URL:-}
+      APP_DOCS_URL: ${APP_DOCS_URL:-}
+      APP_SUPPORT_URL: ${APP_SUPPORT_URL:-}
+      APP_COPYRIGHT: ${APP_COPYRIGHT:-}
     ports:
       - "5173:80"
     volumes:
