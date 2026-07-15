@@ -14,6 +14,18 @@ Formato de entrada:
 
 ---
 
+## [2026-07-15] Sincronização Upstream para v1.0.0 (Latest)
+
+- **Arquivos**: Vários submodules e repositório orquestrador
+- **Motivo da mudança**: Sincronizar todos os serviços com a release final v1.0.0 do upstream mantendo as customizações locais.
+- **Conflitos encontrados**:
+  - `evo-ai-frontend-community`: Conflitos em `EvolutionGoForm.tsx` (formulário de canal da Evolution Go) e nos arquivos i18n de Custom Tools (`customTools.json`).
+  - `evo-crm-community` (Orquestrador): Conflito trivial de ponteiros nos submodules customizados.
+- **Resolução**:
+  - `EvolutionGoForm.tsx`: Mesclado manualmente para manter a UI avançada de Proxy e validações.
+  - `customTools.json`: Resolvido mantendo as traduções locais de testes de Custom Tools e eliminação/deletar.
+- **Branch nos forks**: `develop` (para `evo-auth-service-community`, `evo-ai-crm-community` e `evo-ai-frontend-community`), `main` (para `evolution-go`).
+
 ## [2026-07-03] Docker publish — evolution-go e evo-auth-service-community
 
 - **Imagens**: 
