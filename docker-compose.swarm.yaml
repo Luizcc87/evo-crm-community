@@ -17,6 +17,9 @@
 ##        - DOORKEEPER_JWT_SECRET_KEY  auth, auth_sidekiq
 ##        - ENCRYPTION_KEY .......... core, processor
 ##        - BOT_RUNTIME_SECRET ...... crm, crm_sidekiq, bot_runtime
+##        - AUTH_APIKEY_INTEGRATION_LOCAL  crm, crm_sidekiq, evoflow
+##        - CLICKHOUSE_PASSWORD ..... clickhouse, evoflow
+##        - RABBITMQ_DEFAULT_PASS ... rabbitmq, e dentro do RABBITMQ_URL do evoflow
 ##
 ##   3. Banco de dados: defina a senha do Postgres. Atenção: a mesma senha
 ##      aparece como POSTGRES_PASSWORD (serviços Rails), DB_PASSWORD (core/Go)
@@ -251,6 +254,14 @@ services:
       - EVO_AUTH_SERVICE_URL=http://evocrm_auth:3001
       - EVO_AI_CORE_SERVICE_URL=http://evocrm_core:5555
 
+    ## 🔀 EvoFlow (tela de Segments + tracking de eventos do contato) — porta 3334
+    ## Sem estas 4 variáveis o CRM levanta EvoFlow::ConfigurationError e /api/v1/segments responde 500.
+    ## EVO_FLOW_ALLOW_INSECURE=true é obrigatório aqui: RAILS_ENV=production + URL http:// na rede interna.
+      - EVO_FLOW_ENABLED=true
+      - EVO_FLOW_API_URL=http://evocrm_evoflow:3334/api/v1
+      - AUTH_APIKEY_INTEGRATION_LOCAL=    # Chave compartilhada CRM <-> evo-flow (o MESMO valor em crm, crm_sidekiq e evoflow). Ex.: gere com "openssl rand -hex 32"
+      - EVO_FLOW_ALLOW_INSECURE=true
+
     ## 🌐 URLs públicas e CORS — troque SUBDOMAIN_FRONTEND e SUBDOMAIN_API pelos seus domínios
       - BACKEND_URL=https://SUBDOMAIN_API
       - FRONTEND_URL=https://SUBDOMAIN_FRONTEND
@@ -320,6 +331,12 @@ services:
     ## 🔗 Serviços internos (Auth + Core)
       - EVO_AUTH_SERVICE_URL=http://evocrm_auth:3001
       - EVO_AI_CORE_SERVICE_URL=http://evocrm_core:5555
+
+    ## 🔀 EvoFlow — o sidekiq emite os eventos de tracking; mesmos valores do evocrm_crm.
+      - EVO_FLOW_ENABLED=true
+      - EVO_FLOW_API_URL=http://evocrm_evoflow:3334/api/v1
+      - AUTH_APIKEY_INTEGRATION_LOCAL=    # Mesmo valor de AUTH_APIKEY_INTEGRATION_LOCAL usado no evocrm_crm e evocrm_evoflow
+      - EVO_FLOW_ALLOW_INSECURE=true
 
     ## 🌐 URLs públicas e CORS — troque SUBDOMAIN_FRONTEND e SUBDOMAIN_API pelos seus domínios
       - BACKEND_URL=https://SUBDOMAIN_API
@@ -538,6 +555,119 @@ services:
 
 ## --------------------------- ORION --------------------------- ##
 
+  ## ClickHouse — storage dos eventos do evo-flow (STORAGE_MODE=clickhouse).
+  ## Sem portas publicadas: só a rede interna alcança.
+  ## O evo-flow cria database e tabelas sozinho (CREATE DATABASE/TABLE IF NOT EXISTS).
+  evocrm_clickhouse:
+    image: clickhouse/clickhouse-server:latest  ## Versão do ClickHouse
+
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=    # Mesmo valor de CLICKHOUSE_PASSWORD usado no evocrm_evoflow. Ex.: gere com "openssl rand -hex 16"
+      - CLICKHOUSE_DB=default
+
+    volumes:
+      - evocrm_clickhouse_data:/var/lib/clickhouse
+
+    networks:
+      - evonet ## Nome da rede interna
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+## --------------------------- ORION --------------------------- ##
+
+  ## RabbitMQ — o evo-flow exige um broker no boot, mesmo com QUEUE_MODE=direct.
+  ## Usuário dedicado: o 'guest' do RabbitMQ só aceita conexão vinda de localhost.
+  evocrm_rabbitmq:
+    image: rabbitmq:3-alpine  ## Versão do RabbitMQ
+
+    environment:
+      - RABBITMQ_DEFAULT_USER=evoflow
+      - RABBITMQ_DEFAULT_PASS=    # Mesma senha usada dentro do RABBITMQ_URL do evocrm_evoflow. Ex.: gere com "openssl rand -hex 16"
+
+    volumes:
+      - evocrm_rabbitmq_data:/var/lib/rabbitmq
+
+    networks:
+      - evonet ## Nome da rede interna
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+## --------------------------- ORION --------------------------- ##
+
+  ## EvoFlow (NestJS) — serve /api/v1/segments ao CRM (que faz proxy) — porta 3334.
+  ## Postgres DEDICADO (evo_campaign) no mesmo servidor do CRM: o boot cria o banco
+  ## e roda as migrations. O banco do CRM (evocrm) não é tocado.
+  ## O swarm ignora depends_on → o boot espera o ClickHouse por conta própria.
+  evocrm_evoflow:
+    image: evoapicloud/evo-flow-community:develop
+    command:
+      - sh
+      - -c
+      - |
+        until node -e 'require("http").get("http://evocrm_clickhouse:8123/ping",r=>process.exit(r.statusCode===200?0:1)).on("error",()=>process.exit(1))'; do echo 'Waiting for clickhouse...'; sleep 5; done
+        node -e 'const{Client}=require("pg");const db=process.env.POSTGRES_DB_DATABASE;const c=new Client({host:process.env.POSTGRES_DB_HOST,port:+(process.env.POSTGRES_DB_PORT||5432),user:process.env.POSTGRES_DB_USERNAME,password:process.env.POSTGRES_DB_PASSWORD,database:"postgres"});c.connect().then(()=>c.query("CREATE DATABASE "+db)).then(()=>console.log("[init] created "+db)).catch(e=>console.log("[init] "+(e.code==="42P04"?"db already exists":e.message))).finally(()=>c.end());'
+        node_modules/.bin/typeorm migration:run -d dist/database/ormconfig.js || echo "[init] migration:run failed (continuing)"
+        exec node dist/main.js
+
+    networks:
+      - evonet ## Nome da rede interna
+
+    environment:
+    ## ⚙️ Modo de execução (single-node: API + escrita direta no ClickHouse, sem Kafka/Temporal)
+      - NODE_ENV=production
+      - RUN_MODE=api
+      - QUEUE_MODE=direct
+      - STORAGE_MODE=clickhouse
+      - WRITE_MODE=ch-sync
+      - PORT=3334
+      - LOG_LEVEL=log
+
+    ## 🔐 Chave compartilhada com o CRM (idêntica em evocrm_crm e evocrm_crm_sidekiq)
+      - AUTH_APIKEY_INTEGRATION_LOCAL=    # Mesmo valor de AUTH_APIKEY_INTEGRATION_LOCAL usado no evocrm_crm e crm_sidekiq
+
+    ## 🔗 Serviços internos (Auth + CRM)
+      - EVO_AUTH_SERVICE_URL=http://evocrm_auth:3001
+      - EVO_AUTH_VALIDATE_TOKEN_ENDPOINT=/api/v1/auth/validate
+      - EVOAI_CRM_BASE_URL=http://evocrm_crm:3000
+      - EVOAI_CRM_API_TOKEN=    # Mesmo valor de EVOAI_CRM_API_TOKEN usado nos demais serviços
+
+    ## 🐇 Broker (exigido no boot mesmo em QUEUE_MODE=direct)
+      - BROKER_TYPE=rabbitmq
+      - RABBITMQ_URL=amqp://evoflow:RABBITMQ_PASSWORD@evocrm_rabbitmq:5672    # Troque RABBITMQ_PASSWORD pela senha definida em evocrm_rabbitmq
+
+    ## 🧊 ClickHouse (eventos)
+      - CLICKHOUSE_HOST=evocrm_clickhouse
+      - CLICKHOUSE_PORT=8123
+      - CLICKHOUSE_DATABASE=evo_campaign
+      - CLICKHOUSE_USERNAME=default
+      - CLICKHOUSE_PASSWORD=    # Mesmo valor de CLICKHOUSE_PASSWORD usado no evocrm_clickhouse
+      - CLICKHOUSE_TABLE=contact_events
+
+    ## 🗄️ PostgreSQL — banco dedicado evo_campaign no MESMO Postgres (não toca o evocrm)
+      - POSTGRES_DB_HOST=pgvector
+      - POSTGRES_DB_PORT=5432
+      - POSTGRES_DB_USERNAME=postgres
+      - POSTGRES_DB_PASSWORD=    # Senha do seu Postgres (a mesma em todos os serviços)
+      - POSTGRES_DB_DATABASE=evo_campaign
+
+    ## 🧊 Redis (cache de token/sessão) — DB 4 para não colidir com o CRM (1)
+      - REDIS_HOST=evocrm_redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=4
+
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+## --------------------------- ORION --------------------------- ##
+
 volumes:
   evocrm_processor_logs:
     external: true
@@ -545,6 +675,8 @@ volumes:
   evocrm_redis:
     external: true
     name: evocrm_redis
+  evocrm_clickhouse_data:
+  evocrm_rabbitmq_data:
   evocrm_storage:
   evoauth_storage:
 
